@@ -3,8 +3,6 @@ import HomeLayout from "../layout/HomeLayout/HomeLayout";
 import Board from "../page/Board";
 
 
-
-
 const route = createBrowserRouter([
   {
     path: "/",

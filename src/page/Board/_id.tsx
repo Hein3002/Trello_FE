@@ -1,9 +1,8 @@
-import React from 'react'
 
 const BoarDetials = () => {
   return (
     <div>
-      details
+      hiển test _id
     </div>
   )
 }
