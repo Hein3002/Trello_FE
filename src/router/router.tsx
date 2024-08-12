@@ -11,6 +11,10 @@ const route = createBrowserRouter([
       {
         path:"list-board",
         element: <Board/>
+      },
+      {
+        path:"Test",
+        element: <Board/>
       }
     ]
   }
