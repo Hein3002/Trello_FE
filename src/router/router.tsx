@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomeLayout from "../layout/HomeLayout/HomeLayout";
 import Board from "../page/Board";
+import BoardDetials from "../page/Board/_id";
+
 
 
 const route = createBrowserRouter([
@@ -12,9 +14,8 @@ const route = createBrowserRouter([
         path:"list-board",
         element: <Board/>
       },
-      {
-        path:"Test",
-        element: <Board/>
+        path:"id",
+        element: <BoardDetials/>        
       }
     ]
   }
