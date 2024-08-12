@@ -3,7 +3,7 @@ import React from 'react'
 const Board = () => {
   return (
     <div>
-      <p>Board</p>
+      <p>Hiep test thang nay</p>
     </div>
   )
 }

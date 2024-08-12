@@ -1,11 +1,10 @@
-import React from 'react'
 
-const BoarDetials = () => {
+const BoardDetials = () => {
   return (
     <div>
-      details
+      hiển test _id
     </div>
   )
 }
 
-export default BoarDetials
+export default BoardDetials
