@@ -4,6 +4,7 @@ import Board from "../page/Board";
 import BoardDetials from "../page/Board/_id";
 
 
+
 const route = createBrowserRouter([
   {
     path: "/",
