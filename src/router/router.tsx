@@ -14,6 +14,7 @@ const route = createBrowserRouter([
         path:"list-board",
         element: <Board/>
       },
+      {
         path:"id",
         element: <BoardDetials/>        
       }
