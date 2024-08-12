@@ -1,10 +1,9 @@
-import Outlet from "react-router-dom"
-
+import { Outlet } from 'react-router-dom'
 
 const BoardLayout = () => {
   return (
     <div>
-      Layout Board
+      <h1>BoardLayout</h1>
       <Outlet/>
     </div>
   )

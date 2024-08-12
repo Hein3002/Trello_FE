@@ -1,6 +1,6 @@
 import React from 'react'
 
-const _id = () => {
+const BoarDetials = () => {
   return (
     <div>
       details
@@ -8,4 +8,4 @@ const _id = () => {
   )
 }
 
-export default _id
+export default BoarDetials
