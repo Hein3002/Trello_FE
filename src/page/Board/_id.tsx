@@ -1,5 +1,5 @@
 
-const BoarDetials = () => {
+const BoardDetials = () => {
   return (
     <div>
       hiển test _id
@@ -7,4 +7,4 @@ const BoarDetials = () => {
   )
 }
 
-export default BoarDetials
+export default BoardDetials
