@@ -1,8 +1,11 @@
+import BoardBar from "./BoardBar/BoardBar"
+import BoardContent from "../Board/BoardContent/BoardContent"
 
 const BoardDetials = () => {
   return (
     <div>
-      hiển test _id
+      <BoardBar/>
+      <BoardContent/>
     </div>
   )
 }
