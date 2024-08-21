@@ -1,4 +1,4 @@
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 20px;
 }
 *::-webkit-scrollbar {
@@ -12,4 +12,8 @@
 *::-webkit-scrollbar-thumb:hover {
   background: white;
   border-radius: '8px'
+} */
+
+a {
+  color: #dee2e6 !important;
 }
