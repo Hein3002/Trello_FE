@@ -9,11 +9,7 @@ const BoardContent = () => {
   }
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <div className="w-100 vh-100" style={{ background: '#08377b', marginTop: '97px' }}>
-        <div className="py-2 px-3">
-          <ListColumn />
-        </div>
-      </div>
+      board content
     </DndContext>
   )
 }
