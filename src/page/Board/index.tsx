@@ -7,7 +7,6 @@ const Board = () => {
           list Board
       </div>
     </>
-  )
-}
-
-export default Board
+  );
+};
+export default Board;

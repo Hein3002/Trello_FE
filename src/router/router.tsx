@@ -35,6 +35,6 @@ const route = createBrowserRouter([
       }
     ]
   }
-])
+]);
 
-export default route
+export default route;

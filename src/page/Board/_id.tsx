@@ -1,5 +1,5 @@
-import BoardBar from "./BoardBar/BoardBar"
-import BoardContent from "../Board/BoardContent/BoardContent"
+import BoardBar from "./BoardBar/BoardBar";
+import BoardContent from "../Board/BoardContent/BoardContent";
 
 const BoardDetials = () => {
   return (
@@ -7,7 +7,7 @@ const BoardDetials = () => {
       <BoardBar/>
       <BoardContent/>
     </div>
-  )
-}
+  );
+};
 
-export default BoardDetials
+export default BoardDetials;
