@@ -1,4 +1,6 @@
 import { Col, Row, Flex, Input, Button, Dropdown, Avatar } from "antd";
+import style from './BoardBar.module.scss';
+import classNames from "classnames/bind";
 import { FaRegStar } from "react-icons/fa";
 import { IoPeople } from "react-icons/io5";
 import { DownOutlined } from '@ant-design/icons';
@@ -8,11 +10,13 @@ import { IoFilterSharp } from "react-icons/io5";
 import { IoIosMore } from "react-icons/io";
 import { UserOutlined } from '@ant-design/icons';
 
+const cx = classNames.bind(style);
+
 
 const BoardBar = () => {
   return (
     <>
-      <Row justify='space-around'>
+      <Row justify='space-around' className={cx('board-bar')}>
         <Col span={10}>
           <Flex align="center" gap={10}>
             <Input placeholder="Basic usage" variant="outlined" size="large" style={{ maxWidth: "200px" }} />

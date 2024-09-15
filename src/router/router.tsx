@@ -5,6 +5,8 @@ import Home from "../page/Home/Home";
 import BoardLayout from "../layout/BoardLayout/BoardLayout";
 import Work from "../page/Work/Work";
 import BoardDetials from "../page/Board/_id";
+import AuthLayout from "../layout/AuthLayout/AuthLayout";
+import Login from "../page/Auth/Login/Login";
 
 
 
@@ -33,6 +35,15 @@ const route = createBrowserRouter([
         path: "my-board",
         element: <BoardDetials />
       }
+    ]
+  },
+  {
+    element: <AuthLayout />,
+    children: [
+     {
+      path: "login",
+      element: <Login/>
+     }
     ]
   }
 ]);

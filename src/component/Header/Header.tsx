@@ -46,18 +46,20 @@ const Header = () => {
             </Link>
           </Flex>
         </Col>
-        <Col span={17}>
+        <Col span={7}>
           <Flex gap={5} align="center">
-            <MenuHeader title="Các không gian làm việc" items={items} />
-            <MenuHeader title="Gần đây" items={items} />
             <MenuHeader title="Đánh dấu sao" items={items} />
             <MenuHeader title="Mẫu" items={items} />
+          </Flex>
+        </Col>
+        <Col span={6}>
+          <Flex gap={5} align="center">    
+            <Input placeholder="Tìm kiếm" prefix={<IoSearchOutline size={15} />} />        
             <Button type="primary">Tạo mới</Button>
           </Flex>
         </Col>
-        <Col span={5}>
-          <Flex align="center" gap={10}>
-            <Input placeholder="Tìm kiếm" prefix={<IoSearchOutline size={15} />} />
+        <Col span={9}>
+          <Flex align="center" justify="flex-end" gap={10} style={{paddingRight: "10px"}}>
             <FaRegBell size={20} />
             <IoHelpCircleOutline size={28} />
             <Badge dot >
