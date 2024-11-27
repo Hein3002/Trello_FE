@@ -23,7 +23,7 @@ const items = [
     ]
   }
 ];
-const { Text, Title } = Typography;
+const { Title } = Typography;
 const { Sider, Content } = Layout;
 const BoardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);

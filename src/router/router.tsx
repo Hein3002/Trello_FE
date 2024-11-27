@@ -4,9 +4,12 @@ import Board from "../page/Board";
 import Home from "../page/Home/Home";
 import BoardLayout from "../layout/BoardLayout/BoardLayout";
 import Work from "../page/Work/Work";
-import BoardDetials from "../page/Board/_id";
+import BoardDetials from "../page/Board/id";
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Login from "../page/Auth/Login/Login";
+import BoardContent from "../page/Board/BoardContent/BoardContent";
+import { mockData } from "../api/mock-data";
+import { Calendar } from "antd";
 
 
 
@@ -33,7 +36,17 @@ const route = createBrowserRouter([
       },
       {
         path: "my-board",
-        element: <BoardDetials />
+        element: <BoardDetials />,
+        children:[
+          {
+            path: "",
+            element: <BoardContent board={mockData.board}/>
+          },
+          {
+            path: "calender",
+            element: <Calendar/>
+          }
+        ]
       }
     ]
   },

@@ -4,6 +4,12 @@ import ListCard from './Column/ListCard/ListCard';
 import { Column as ColumnModel } from '../../../../model/ColumnModel';
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
+import { Typography } from 'antd';
+import { Button } from 'antd';
+import { TbCopy } from "react-icons/tb";
+import { IoMdAdd } from "react-icons/io";
+
+const { Title } = Typography;
 
 const cx = classNames.bind(styles);
 interface Props {
@@ -17,16 +23,26 @@ const Column: React.FC<Props> = ({ column }) => {
     setNodeRef,
     transform,
     transition,
-  } = useSortable({id: column.column_id});
+    isDragging
+  } = useSortable({id: column.column_id, data: {...column}});
   
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
+    opacity: isDragging ? 0.5 : undefined,
+    height: '100%',
   };
   return (
     <>
-      <div className={cx('column')} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div  ref={setNodeRef}  {...attributes}  style={style}>
+      <div className={cx('column')} {...listeners}>   
+        <Title level={5}>{column?.title}</Title>          
         <ListCard cards={column?.cards}/>
+        <div className={cx('column-action')}>
+          <Button iconPosition='start' type='text' icon={<IoMdAdd />}>Thêm thẻ</Button>
+          <Button type='text' icon={<TbCopy/>}/>
+        </div>
+      </div>
       </div>
     </>
 

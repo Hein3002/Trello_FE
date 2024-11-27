@@ -23,6 +23,7 @@ const Login = () => {
         labelCol={{ span: 8 }}
         initialValues={{ remember: true }}
         autoComplete="off"
+        form={form}
       >
         <Form.Item>
           <Button> <FcGoogle />Tiếp tục đăng nhập bằng Google</Button>

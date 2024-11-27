@@ -14,8 +14,8 @@ const ListColumn: React.FC<Props> = ({columns}) => {
   return (
     <>
     <SortableContext items={columns.map(column => column.column_id)} strategy={horizontalListSortingStrategy}>
-        <Row justify='center'>
-          <Col span={24}>
+        <Row justify='center' style={{height: '100%'}}>
+          <Col span={24} style={{height: '100%'}}>
             <Flex gap={20} className={cx('list-column')}>
               {
                 columns.map((column => <Column key={column.column_id} column = {column}/>))
