@@ -71,25 +71,25 @@ const BoardContent: React.FC<Props> = ({ board }) => {
         const overCardIndex = overColumn?.cards?.findIndex(card => card.card_id === overCardId);
 
         let newCardIndex: number;
-        
+
         const isBelowOverItem =
           active.rect.current.translated &&
           active.rect.current.translated.top >
           over.rect.top + over.rect.height;
         const modifier = isBelowOverItem ? 1 : 0;
         newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn.cards.length + 1;
-        const nextColumn = cloneDeep(prevColumns) ;
+        const nextColumn = cloneDeep(prevColumns);
         const nextActiveColumn = nextColumn.find(column => column.column_id === activeColumn.column_id)
         const nextOverColumn = nextColumn.find(column => column.column_id === overColumn.column_id)
-        if(nextActiveColumn){
+        if (nextActiveColumn) {
           nextActiveColumn.cards = nextActiveColumn.cards.filter(card => card.card_id !== activeDraggingCardId)
         }
-        if(nextOverColumn){
+        if (nextOverColumn) {
           nextOverColumn.cards = nextOverColumn.cards.filter(card => card.card_id !== activeDraggingCardId)
           nextOverColumn.cards.splice(
             newCardIndex,
             0,
-            {...activeDraggingCardData as CardModel, columnId: nextOverColumn.column_id}
+            { ...activeDraggingCardData as CardModel, columnId: nextOverColumn.column_id }
           )
         }
         console.log(newCardIndex)
@@ -99,13 +99,18 @@ const BoardContent: React.FC<Props> = ({ board }) => {
   };
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over) return;
-    if (active.id !== over.id) {
-      setSortedColumn((sortedColumn) => {
-        const oldIndex = sortedColumn.findIndex(column => column.column_id === active.id);
-        const newIndex = sortedColumn.findIndex(column => column.column_id === over.id);
-        return arrayMove(sortedColumn, oldIndex, newIndex);
-      });
+    if (!over || !active) return;
+    if (dragItemType === ACTIVE_ITEM_TYPE.CARD) {
+      return
+    }
+    if (dragItemType === ACTIVE_ITEM_TYPE.COLUMN) {
+      if (active.id !== over.id) {
+        setSortedColumn((sortedColumn) => {
+          const oldIndex = sortedColumn.findIndex(column => column.column_id === active.id);
+          const newIndex = sortedColumn.findIndex(column => column.column_id === over.id);
+          return arrayMove(sortedColumn, oldIndex, newIndex);
+        });
+      }
     }
   };
 
