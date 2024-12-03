@@ -45,6 +45,7 @@ const Card: React.FC<Props> = ({ action = false, card }) => {
               src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
             />: null          
           }
+          onClick={()=>alert("hien")}
           actions={action ? [
             <SettingOutlined key="setting" />,
             <EditOutlined key="edit" />,
