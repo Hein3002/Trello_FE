@@ -1,10 +1,11 @@
+import ChatApp from "../../component/Chat/Chat";
 
 
 const Board = () => {
   return (
     <>
       <div>
-          list Board
+          <ChatApp/>
       </div>
     </>
   );
