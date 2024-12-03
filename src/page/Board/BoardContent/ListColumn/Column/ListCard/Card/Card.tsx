@@ -3,8 +3,8 @@ import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/ico
 import classNames from 'classnames/bind';
 import styles from '../../../../BoardContent.module.scss';
 import { Card as CardModel } from "../../../../../../../model/CardModel";
-import {useSortable} from '@dnd-kit/sortable';
-import {CSS} from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const cx = classNames.bind(styles);
 
@@ -21,39 +21,40 @@ const Card: React.FC<Props> = ({ action = false, card }) => {
     transform,
     transition,
     isDragging
-  } = useSortable({id: card.card_id, data: {...card}});
-  
+  } = useSortable({ id: card.card_id, data: { ...card } });
+
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : undefined,
     border: isDragging ? '3px solid #81ecec' : undefined
   };
+
   return (
     <>
-        <CardAntd
-          ref={setNodeRef} style={style} {...attributes} {...listeners}
-          className={cx('list-card-item')}
-          styles={{
-            body: {
-              padding: '10px'
-            }
-          }}
-          cover={card?.cover ? 
-            <img
-              alt="example"
-              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-            />: null          
+      <CardAntd
+        ref={setNodeRef} style={style} {...attributes} {...listeners}
+        className={cx('list-card-item')}
+        styles={{
+          body: {
+            padding: '10px'
           }
-          actions={action ? [
-            <SettingOutlined key="setting" />,
-            <EditOutlined key="edit" />,
-            <EllipsisOutlined key="ellipsis" />,
-          ] : undefined}
-          
-        >
-          {card?.title}
-        </CardAntd >
+        }}
+        cover={card?.cover ?
+          <img
+            alt="example"
+            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+          /> : null
+        }
+        actions={action ? [
+          <SettingOutlined key="setting" />,
+          <EditOutlined key="edit" />,
+          <EllipsisOutlined key="ellipsis" />,
+        ] : undefined}
+
+      >
+        {card?.title}
+      </CardAntd >
     </>
   );
 };
