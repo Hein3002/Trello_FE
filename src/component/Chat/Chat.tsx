@@ -66,7 +66,7 @@ const ChatApp = () => {
                   backgroundColor: msg.type === 'question' ? '#e6f7ff' : '#f0f0f0',
                   textAlign: 'left',
                   wordBreak: 'break-word',
-                  whiteSpace: 'normal',   
+                  whiteSpace: 'normal',
                 }}
               >
                 <Text>{msg.content}</Text>
