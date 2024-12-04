@@ -27,6 +27,7 @@ import { Column as ColumnModel } from '../../../model/ColumnModel';
 import { Card as CardModel } from '../../../model/CardModel';
 import Column from './ListColumn/Column';
 import Card from './ListColumn/Column/ListCard/Card/Card';
+import CardDialog from '../../../component/CardDialog/CardDialog';
 
 
 const cx = classNames.bind(styles);
@@ -112,8 +113,12 @@ const BoardContent: React.FC<Props> = ({ board }) => {
       });
     };
   };
+  // handel modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+
     if (!over || !active) return;
     if (dragItemType === ACTIVE_ITEM_TYPE.CARD) {
       const { id: activeDraggingCardId, data: { current: activeDraggingCardData } } = active;
@@ -191,6 +196,10 @@ const BoardContent: React.FC<Props> = ({ board }) => {
         });
       }
     }
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
     setDragItemId(null)
     setDragItemType(null);
     setDragItemData(null)
@@ -243,6 +252,7 @@ const BoardContent: React.FC<Props> = ({ board }) => {
 
 
   return (
+
     <DndContext
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
