@@ -5,15 +5,42 @@ import { CiLock } from "react-icons/ci";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
 import { Avatar, Typography, Button, Row, Col, Select, Flex, Input } from 'antd';
-import Table from "../../component/Table/Table";
+import Table from "../../component/SymbolicTable/SymbolicTable";
+import { useParams } from "react-router-dom";
+import { getWorkSpacedByIdAPI } from "../../services/WorkSpace/workSapce.service";
+import { useEffect, useState } from "react";
+import { WorkSpace } from "../../model/WorkSpaceModel";
+import ModalCreateColumn from "./compoent/Modal/ModalCreateColumn";
+import { URL } from "../../utils/url";
 
 const { Title, Text } = Typography;
 const cx = classNames.bind(styles);
 
 
 const Work = () => {
+  const { id } = useParams()
+  const [data, setData] = useState<WorkSpace>()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const fetchWorkSapceDetails = async () => {
+    const reponse = await getWorkSpacedByIdAPI(id)
+    setData(reponse)
+  }
+  useEffect(() => {
+    fetchWorkSapceDetails()
+  }, [])
+  console.log()
   return (
     <>
+      <ModalCreateColumn isOpenModal={isModalOpen} handleCancel={handleCancel} fetchWorkSapceDetails={fetchWorkSapceDetails} />
       <div className={cx('work-page')}>
         <Row justify='center'>
           <Col span={16}>
@@ -21,8 +48,8 @@ const Work = () => {
               <div className={cx('user')}>
                 <Avatar shape="square" size={64} icon={<UserOutlined />} className={cx('user-icon')} />
                 <div className={cx('user-profile')}>
-                  <Title editable level={4}>Trello không gian làm việc</Title>
-                  <Text strong> <CiLock /> Riêng tư</Text>
+                  <Title editable level={4}>{data?.name}</Title>
+                  <Text strong> <CiLock />{data?.status}</Text>
                 </div>
               </div>
               <Button type="primary"><IoPersonAddOutline />Mời các thành viên vào không gian làm việc</Button>
@@ -69,7 +96,16 @@ const Work = () => {
                   <Input placeholder="Tìm kiếm" prefix={<IoSearchOutline size={15} />} />
                 </Flex>
               </Flex>
-              <Table title="Project Manangement"/>
+              <Flex align="center" gap="10px" wrap>
+                {
+                  data?.board && data.board.length > 0
+                    ? data.board.map((item, index) => (
+                      <Table path={URL.BOARD+item.board_id} key={index} title={item.name} />
+                    ))
+                    : []
+                }
+                <Button style={{ width: "23.5%", padding: "50px" }} onClick={showModal}>Tạo bảng</Button>
+              </Flex>
               <Button type="text" className={cx('btn')}>Xem tất cả các bảng đã đóng</Button>
             </Flex>
           </Col>

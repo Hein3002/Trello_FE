@@ -1,13 +1,13 @@
-import ChatApp from "../../component/Chat/Chat";
+import { Button,  } from 'antd';
+const App: React.FC = () => {
+ 
 
-
-const Board = () => {
   return (
-    <>
-      <div>
-          <ChatApp/>
-      </div>
-    </>
+    
+      <Button type="primary">
+        Open Popconfirm with async logic
+      </Button>
   );
 };
-export default Board;
+
+export default App;

@@ -1,8 +1,7 @@
 export interface Card {
   card_id: string,
-  boardId: string,
   columnId: string,
-  title: string,
+  name: string,
   description: string|null,
   cover: string|null,
   memberIds: string[],

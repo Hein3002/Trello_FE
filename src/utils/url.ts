@@ -1,7 +1,7 @@
 export const URL = {
-  ROOT: '/',
-  HOME: '/home',
+  HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  HELP: '/help'
+  BOARD: '/board/',
+  WORKSPACE: '/workspace/:id'
 }

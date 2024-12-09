@@ -14,7 +14,7 @@ interface Props {
 const ListCard: React.FC<Props> = ({ cards }) => {
   return (
     <>
-      <SortableContext items={cards.map(card => card.card_id)} strategy={verticalListSortingStrategy}>
+      <SortableContext items={cards?.map(card => card.card_id)??[]} strategy={verticalListSortingStrategy} >
         <Flex vertical className={cx('list-card')} gap={10}>          
           {
             cards?.map(card => <Card key={card.card_id} card={card} />)

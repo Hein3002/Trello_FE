@@ -8,8 +8,11 @@ import BoardDetials from "../page/Board/id";
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Login from "../page/Auth/Login/Login";
 import BoardContent from "../page/Board/BoardContent/BoardContent";
-import { mockData } from "../api/mock-data";
 import { Calendar } from "antd";
+import Register from "../page/Auth/Register/Register";
+import ChatApp from "../component/Chat/Chat";
+import Table from "../page/Board/BoardContent/Table/Table";
+import { URL } from "../utils/url";
 
 
 
@@ -31,20 +34,30 @@ const route = createBrowserRouter([
     element: <BoardLayout />,
     children: [
       {
-        path: "work",
+        path: "workspace/:id",
         element: <Work />
       },
       {
-        path: "my-board",
+        path: URL.BOARD+":id",
         element: <BoardDetials />,
         children:[
           {
             path: "",
-            element: <BoardContent board={mockData.board}/>
+            element: <BoardContent/>,
+            children: [
+              {
+                path:"message",
+                element:<ChatApp/>
+              }
+            ]
           },
           {
             path: "calender",
             element: <Calendar/>
+          },
+          {
+            path: "table",
+            element: <Table/>
           }
         ]
       }
@@ -56,6 +69,10 @@ const route = createBrowserRouter([
      {
       path: "login",
       element: <Login/>
+     },
+     {
+      path: "register",
+      element: <Register/>
      }
     ]
   }

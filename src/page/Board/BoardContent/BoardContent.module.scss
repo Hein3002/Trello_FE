@@ -1,13 +1,20 @@
 .board-content {
-  padding: 15px;
   overflow: hidden;
   height: calc( 100vh - 90px );
   display: flex;
     .list-column {
-      padding-bottom: 10px;  
+      padding: 10px;  
       height: 100%; 
       overflow-x: auto;
-      overflow-y: hidden;    
+      overflow-y: hidden;  
+      .column-action-add {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        button {
+          width: fit-content;
+        }
+      }      
     }  
   }
   .column {
@@ -18,7 +25,19 @@
     max-height: 100%;
     border-radius: 5px;
     padding: 5px 7px 10px 14px;
-    background-color: #f1f2f4;        
+    background-color: #f1f2f4;   
+    &-action {
+      display: flex;  
+      button:nth-child(1) {
+        justify-content: start;
+        flex: 1;
+      }
+      &-addcard { 
+        input {
+          margin-bottom: 10px;
+        }
+      }
+    }     
     h5 {
       margin: 0;
       margin-right: 7px;
@@ -27,18 +46,21 @@
     .list-card {
       flex: 1;
       height: 100%;
-      padding: 0 7px 0 0; 
+      padding: 0 7px 10px 0; 
       border-radius: 5px;
       overflow-y: auto;
-      overflow-x: hidden;     
-    }
-    &-action {
-      margin-top: 10px;
-      display: flex;
-      button:nth-child(1) {
-        flex: 1;
-        justify-content: flex-start;
+      overflow-x: hidden;   
+      
+      &-item {
+        .card-action {
+         gap: 20px;
+         &-deadline {
+          margin: 3px 0;
+          background: green;
+          padding: 1px 5px;
+          border-radius: 5px;
+         }
+        }
       }
-    }
-
+    }  
 }

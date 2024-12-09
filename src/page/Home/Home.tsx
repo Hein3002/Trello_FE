@@ -1,6 +1,6 @@
 import styles from './Home.module.scss';
 import classNames from "classnames/bind";
-import Table from "../../component/Table/Table";
+import Table from "../../component/SymbolicTable/SymbolicTable";
 import { Typography, Button, Flex } from 'antd';
 import { FaRegClock } from "react-icons/fa6";
 
@@ -41,7 +41,7 @@ const Home = () => {
               </Flex>
             </div>
             <div className={cx('home-content-middle-main')}>
-              <Table title='Hiển Test cái này' />
+              <Table path='my-board' title='Hiển Test cái này' />
             </div>
           </div>
 

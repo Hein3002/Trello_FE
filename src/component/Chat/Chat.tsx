@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Input, Button, Typography, Card, Space, Avatar } from 'antd';
+import classNames from 'classnames/bind';
+import style from "./Chat.module.scss"
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
+const cx = classNames.bind(style)
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([
@@ -24,7 +27,7 @@ const ChatApp = () => {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleSendMessage();
@@ -32,29 +35,31 @@ const ChatApp = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        padding: '16px',
-      }}
-    >
+    <div className={cx("chat")}>
+      <Title level={5} style={{ margin: "10px" }}>
+      <Avatar src={<img src={'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg'} alt="avatar" />} />
+        Thằng này tí trượt
+      </Title>
       <Card
-        title="ChatGPT-like Q&A"
-        style={{ flex: 1, overflowY: 'auto', marginBottom: '16px' ,
-          wordBreak: 'break-word',
-          whiteSpace: 'normal',
+        className={cx("chat-content")}
+        style={{
+          borderRadius: 0
+        }}
+        styles={{
+          body: {
+            padding: "10px",
+            overflow: "auto"
+          },
         }}
       >
         {messages.map((msg, index) => (
           <div
             key={index}
+            className={cx("chat-message")}
             style={{
               display: 'flex',
               justifyContent: msg.type === 'question' ? 'flex-end' : 'flex-start',
               marginBottom: '16px',
-              
             }}
           >
             <Space align="start">
@@ -62,23 +67,22 @@ const ChatApp = () => {
                 <Avatar style={{ backgroundColor: '#87d068' }}>AI</Avatar>
               )}
               <Card
-                style={{
-                  backgroundColor: msg.type === 'question' ? '#e6f7ff' : '#f0f0f0',
-                  textAlign: 'left',
-                  wordBreak: 'break-word',
-                  whiteSpace: 'normal',
-                }}
-              >
+                styles={{
+                  body: {
+                    padding: '5px 10px',
+                    maxWidth: "200px"
+                  }
+                }}>
                 <Text>{msg.content}</Text>
               </Card>
               {msg.type === 'question' && (
-                <Avatar style={{ backgroundColor: '#1890ff' }}>U</Avatar>
+                <></>
               )}
             </Space>
           </div>
         ))}
       </Card>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' ,}}>
+      <div className={cx("chat-input")}>
         <Input.TextArea
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -86,9 +90,11 @@ const ChatApp = () => {
           placeholder="Type your message..."
           autoSize={{ minRows: 1, maxRows: 4 }}
         />
-        <Button type="primary" onClick={handleSendMessage}>
-          Send
-        </Button>
+        <div>
+          <Button type="text" onClick={handleSendMessage} className={cx("btn-send")}>
+            Gửi
+          </Button>
+        </div>
       </div>
     </div>
   );
