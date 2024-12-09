@@ -30,11 +30,13 @@ const Card: React.FC<Props> = ({ action = true, card}) => {
     border: isDragging ? '3px solid #81ecec' : undefined,
     width: "100%"
   };
+
   return (
     <>
       <CardAntd
         ref={setNodeRef} style={style} {...attributes} {...listeners}
         className={cx('list-card-item')}        
+
         styles={{
           body: {
             padding: '10px'
@@ -65,6 +67,7 @@ const Card: React.FC<Props> = ({ action = true, card}) => {
         }
 
       </CardAntd >
+
     </>
   );
 };

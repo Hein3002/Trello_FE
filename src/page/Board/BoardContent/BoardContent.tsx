@@ -28,7 +28,6 @@ import { Card as CardModel } from '../../../model/CardModel';
 import Column from './ListColumn/Column';
 import Card from './ListColumn/Column/ListCard/Card/Card';
 import { Outlet, useOutletContext } from 'react-router-dom';
-
 const cx = classNames.bind(styles);
 type UniqueIdentifier = string | number;
 const ACTIVE_ITEM_TYPE = {
@@ -113,8 +112,12 @@ const BoardContent: React.FC = () => {
       });
     };
   };
+  // handel modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+
     if (!over || !active) return;
     if (dragItemType === ACTIVE_ITEM_TYPE.CARD) {
       const { id: activeDraggingCardId, data: { current: activeDraggingCardData } } = active;
@@ -192,6 +195,10 @@ const BoardContent: React.FC = () => {
       }
 
     }
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
     setDragItemId(null)
     setDragItemType(null);
     setDragItemData(null)
@@ -266,6 +273,7 @@ const BoardContent: React.FC = () => {
         </DragOverlay>
       </DndContext>
     </>
+
   );
 };
 
