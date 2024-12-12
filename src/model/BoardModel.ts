@@ -8,5 +8,7 @@ export interface Board {
   ownerIds?: string[],
   memberIds?: string[],
   columnOrderIds?: string[],
-  column?: Column[];
+  column: Column[];
+  status:string,
+  background?:File
 };

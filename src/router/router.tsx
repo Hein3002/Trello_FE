@@ -8,11 +8,11 @@ import BoardDetials from "../page/Board/id";
 import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Login from "../page/Auth/Login/Login";
 import BoardContent from "../page/Board/BoardContent/BoardContent";
-import { Calendar } from "antd";
 import Register from "../page/Auth/Register/Register";
 import ChatApp from "../component/Chat/Chat";
 import Table from "../page/Board/BoardContent/Table/Table";
 import { URL } from "../utils/url";
+import Schedule from "../page/Board/BoardContent/Calender/Calender";
 
 
 
@@ -53,7 +53,7 @@ const route = createBrowserRouter([
           },
           {
             path: "calender",
-            element: <Calendar/>
+            element: <Schedule/>
           },
           {
             path: "table",

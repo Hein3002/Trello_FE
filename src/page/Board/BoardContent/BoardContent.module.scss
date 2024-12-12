@@ -7,14 +7,7 @@
       height: 100%; 
       overflow-x: auto;
       overflow-y: hidden;  
-      .column-action-add {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        button {
-          width: fit-content;
-        }
-      }      
+      
     }  
   }
   .column {
@@ -26,17 +19,26 @@
     border-radius: 5px;
     padding: 5px 7px 10px 14px;
     background-color: #f1f2f4;   
+    &-title {
+      outline: none;
+      background-color: transparent;
+      border: 0;
+      &:hover{
+        background-color: transparent;
+      }
+      &:active{
+        background-color: transparent;
+      }
+      &:focus{
+        background-color: #ffffff;
+      }
+    }
     &-action {
       display: flex;  
       button:nth-child(1) {
         justify-content: start;
         flex: 1;
-      }
-      &-addcard { 
-        input {
-          margin-bottom: 10px;
-        }
-      }
+      }    
     }     
     h5 {
       margin: 0;

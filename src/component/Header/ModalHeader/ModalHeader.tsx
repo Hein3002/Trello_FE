@@ -4,6 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { WorkSpace } from '../../../model/WorkSpaceModel';
+import { URL } from '../../../utils/url';
 
 
 const ModalHeader = (props: any) => {
@@ -24,7 +25,7 @@ const ModalHeader = (props: any) => {
         }
        const responese = await createWorkSpacedAPI(formData)
        console.log(responese)
-        navigate("/workspace/"+responese.results.workspace_id)
+        navigate(URL.WORKSPACE+responese.results.workspace_id)
       })
   }
   const handleSubmit = () => {

@@ -1,40 +1,58 @@
 import style from "./Table.module.scss"
 import classNames from 'classnames/bind'
-import React from 'react';
-import { Avatar, List } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Col, List, Row, Typography } from "antd";
+import ListItem from "./ListItem/ListItem";
+import { useOutletContext } from "react-router-dom";
+import { Board } from "../../../../model/BoardModel";
+import { Column } from "../../../../model/ColumnModel";
 
 const cx = classNames.bind(style)
 
 
-const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-];
+const {Text} = Typography
 
-const App: React.FC = () => (
-  <List
-    itemLayout="horizontal"
-    dataSource={data}
-    renderItem={(item, index) => (
-      <List.Item>
-        <List.Item.Meta
-          avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-          title={<a href="https://ant.design">{item.title}</a>}
-          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-        />
-      </List.Item>
-    )}
-  />
-);
+const App: React.FC = () => {
+
+  const { board } = useOutletContext<{board:Board}>()
+  const [hozionColumn, setoHzionColumn] = useState<Column[]>([])
+
+  useEffect(()=> {
+    if(board?.column) {
+      setoHzionColumn(board?.column)
+    }
+  },[board])
+  
+  return (
+    <>
+      <Row>
+        <Col span={6}>
+          <Text strong>Thẻ</Text>
+        </Col>
+        <Col span={6}>
+          <Text strong>Danh sách</Text>
+        </Col>
+        <Col span={4}>
+          <Text strong>Nhãn</Text>
+        </Col>
+        <Col span={4}>
+          <Text strong>Thành viên</Text>
+        </Col>
+        <Col span={4}>
+          <Text strong>Ngày hết hạn</Text>
+        </Col>
+      </Row>
+          <List
+            itemLayout="horizontal"
+            dataSource={hozionColumn}
+            renderItem={(item, index) => (
+              <ListItem item={item} />
+            )}
+          />
+    </>
+  )
+};
 
 export default App;

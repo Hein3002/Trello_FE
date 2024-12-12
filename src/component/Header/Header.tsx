@@ -6,7 +6,7 @@ import { BsTrello } from "react-icons/bs";
 import { IoSearchOutline } from "react-icons/io5";
 import { UserOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-import MenuHeader from "./MenuHeder/MenuHeader";
+import MenuHeader from "../DropDow/Dropdow";
 import { chatMenuItem, notificationMenuItem, recentlyMenuItem, starMenuItem, userMenuItem, worksapcesMenuItem } from "./MenuItem/MenuItem";
 import { FaRegBell } from "react-icons/fa";
 import { BiMessageRounded } from "react-icons/bi";
@@ -32,7 +32,7 @@ const Header = () => {
 
   return (
     <>
-      <ModalHeader handleCancel={handleCancel} handleOk={handleOk} isOpenModal={isModalOpen}/>
+      <ModalHeader handleCancel={handleCancel} handleOk={handleOk} isOpenModal={isModalOpen} />
       <div className={cx('trello-header')}>
         <Row align="middle" justify="center" wrap={false}>
           <Col span={2}>
@@ -65,7 +65,6 @@ const Header = () => {
                 </Badge>} items={notificationMenuItem} />
               <MenuHeader Icon={<BiMessageRounded size={20} />} items={chatMenuItem} />
               <MenuHeader Icon={<Avatar shape="circle" size="small" icon={<UserOutlined />} />} items={userMenuItem} />
-
             </Flex>
           </Col>
         </Row>

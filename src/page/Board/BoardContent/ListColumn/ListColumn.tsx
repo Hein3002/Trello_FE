@@ -1,11 +1,13 @@
-import { Flex, Row, Col, Button, Input } from "antd";
+import { useRef, useState } from "react";
 import classNames from 'classnames/bind';
 import styles from '../BoardContent.module.scss';
+import { Flex, Row, Col, Button, Input } from "antd";
+import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+import { useOutletContext } from "react-router-dom";
+import { CloseOutlined } from '@ant-design/icons';
+import { InputRef } from 'antd';
 import Column from "./Column";
 import { Column as ColumnModel } from "../../../../model/ColumnModel";
-import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 interface Props {
@@ -14,12 +16,13 @@ interface Props {
 
 const ListColumn: React.FC<Props> = ({ columns }) => {
   const [openNewColumnform, setOpenNewColumnFomr] = useState(false);
-  const {createNewColumn} = useOutletContext<{createNewColumn:any}>()
-  const [title, setTitle] = useState<string|"">("")
+  const { createNewColumn } = useOutletContext<{ createNewColumn: any }>()
+  const [title, setTitle] = useState<string | "">("")
+  const inputRef = useRef<InputRef>(null);
   const toggleOpenNewColumnForm = () => {
     setOpenNewColumnFomr(!openNewColumnform)
   }
-  const handleAddNewColumn = ()=>{
+  const handleAddNewColumn = () => {
 
     const newColumnData = {
       name: title,
@@ -27,23 +30,39 @@ const ListColumn: React.FC<Props> = ({ columns }) => {
     }
     createNewColumn(newColumnData);
     setTitle("");
-    toggleOpenNewColumnForm()
+    inputRef.current?.focus(); 
   }
   return (
     <>
-      <SortableContext items={columns?.map(column => column?.column_id)} strategy={horizontalListSortingStrategy}>
+      <SortableContext items={columns.map(column => column?.column_id) ?? []} strategy={horizontalListSortingStrategy}>
         <Row justify='center' style={{ height: '100%' }}>
           <Col span={24} style={{ height: '100%' }}>
             <Flex gap={20} className={cx('list-column')}>
               {
-                columns?.map(((column,index) => <Column key={index} column={column} />))
+                columns?.map(((column) => <Column key={column.column_id} column={column} />))
               }
-              
+
               {openNewColumnform
-                ? (<div className={cx("column-action-add")}>
-                  <Input placeholder="Enter column name" variant="outlined" size="large" style={{ maxWidth: "200px" }}value={title} onChange={(e) => setTitle(e.target.value)}/>
-                  <Button type='primary' onClick={handleAddNewColumn}>Add</Button>
-                </div>)
+                ? (<Flex
+                justify="center"
+                  vertical
+                  gap="10px"
+                  className={cx("column")}
+                  style={{ height: "fit-content" }}>
+                  <Input placeholder="Enter column name"
+                  ref={inputRef}
+                    variant="outlined"
+                    size="large"
+                    autoFocus
+                    required
+                    style={{ width: "95%", marginTop: "5px" }}
+                    value={title} onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <Flex gap="10px">
+                    <Button type='primary' style={{ width: "40%" }} onClick={handleAddNewColumn}>Add</Button>
+                    <CloseOutlined onClick={toggleOpenNewColumnForm} />
+                  </Flex>
+                </Flex>)
                 : <Button onClick={toggleOpenNewColumnForm}>Add Column</Button>
               }
             </Flex>

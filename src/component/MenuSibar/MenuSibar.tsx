@@ -5,6 +5,8 @@ import { FaTrello  } from "react-icons/fa6";
 import { FaTableList } from "react-icons/fa6"
 import { MdOutlineTableView } from "react-icons/md";
 import { MdOutlineTableChart } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { URL } from "../../utils/url";
 
 type MenuItem = Required<MenuProps>['items'][number];
 const { Text } = Typography
@@ -60,6 +62,16 @@ const items: MenuItem[] = [
         label:
           <>
             <Text>Hình</Text>
+          </>,
+      },
+      {
+        key: '3',
+        icon:<FaTableList size={14}/>,
+        label:
+          <>
+          <Link to={URL.WORKSPACE+"42"}>
+            <Text>Thành viên</Text>
+          </Link>
           </>,
       },
     ],
