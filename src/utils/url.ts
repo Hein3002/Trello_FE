@@ -3,5 +3,5 @@ export const URL = {
   LOGIN: '/login',
   REGISTER: '/register',
   BOARD: '/board/',
-  WORKSPACE: '/workspace/:id'
+  WORKSPACE: '/workspace/',
 }

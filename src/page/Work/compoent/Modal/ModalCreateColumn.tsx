@@ -1,9 +1,9 @@
 import { Form, FormProps, Input, Modal, Upload } from "antd"
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Column } from "../../../../model/ColumnModel";
 import { createBoardAPI } from "../../../../services/Board/board.sevice";
 import { PlusOutlined } from '@ant-design/icons'
+import { Board } from "../../../../model/BoardModel";
 
 const ModalCreateColumn = (props: any) => {
   const { id } = useParams()
@@ -11,7 +11,7 @@ const ModalCreateColumn = (props: any) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const onFinish: FormProps<Column>['onFinish'] = async () => {
+  const onFinish: FormProps<Board>['onFinish'] = async () => {
     form
       .validateFields()
       .then(async (values: any) => {
@@ -27,7 +27,8 @@ const ModalCreateColumn = (props: any) => {
           formData.append("workspace_id", id)
         }
         const reponse = await createBoardAPI(formData)
-        if (reponse.results) {
+        console.log(reponse)
+        if (reponse) {
           props.fetchWorkSapceDetails()
           props.handleCancel()
         }
@@ -39,7 +40,7 @@ const ModalCreateColumn = (props: any) => {
   return (
     <>
       <Modal
-        title="Basic Modal"
+        title="Tạo bảng"
         open={props.isOpenModal}
         onOk={handleSubmit}
         onCancel={props.handleCancel}
@@ -52,20 +53,20 @@ const ModalCreateColumn = (props: any) => {
           onFinish={onFinish}
           form={form}
         >
-          <Form.Item<Column>
+          <Form.Item<Board>
             name="name"
             rules={[{ required: true, message: 'Please input your name!' }]}
           >
-            <Input placeholder='Tên đăng nhập' />
+            <Input placeholder='Tên bảng' />
           </Form.Item>
-          <Form.Item<Column>
+          <Form.Item<Board>
             name="status"
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input placeholder='Email' />
+            <Input placeholder='Trạng thái' />
           </Form.Item>
 
-          <Form.Item<Column>
+          <Form.Item<Board>
             name="background"
           >
             <Upload listType="picture-card"

@@ -1,10 +1,10 @@
-import { Button, Col, Modal, Row, Typography, Input, Divider, Avatar, List, Checkbox } from 'antd';
+import { Button, Col, Modal, Row, Typography, Input, Divider, Avatar, List, Checkbox, Flex, Menu, Upload } from 'antd';
 import styles from './CardDialog.module.scss';
 import classNames from "classnames/bind";
 import { useState } from 'react';
 import DateModal from './DateModal/DateModal';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import CSS
+import 'react-quill/dist/quill.snow.css';
 import {
     ArrowRightOutlined,
     BookOutlined,
@@ -13,15 +13,15 @@ import {
     ControlOutlined,
     CopyOutlined,
     EllipsisOutlined,
-    EyeOutlined,
     LinkOutlined,
     PictureOutlined,
     PlusOutlined,
     ShareAltOutlined,
-    TagOutlined,
+    UploadOutlined,
     UserAddOutlined,
     UserOutlined
 } from '@ant-design/icons';
+import CustomPop from './../PopConfirm/PopConfirm';
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +29,7 @@ const { Title, Text } = Typography;
 
 const CardDialog = (props: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const { cardData } = props
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
 
@@ -38,17 +38,17 @@ const CardDialog = (props: any) => {
     const handleDescriptionChange = (value: any) => {
         setDescription(value); // Cập nhật giá trị khi người dùng chỉnh sửa
     };
+    if (!cardData) {
+        return
+    }
 
     return (
         <>
-            <Modal width={900} footer={null} open={props.isModalOpen} onCancel={props.handleCancel} title={
+            <Modal width={900} footer={null} open={props.isModalOpen} onCancel={props.handleToggleModal} title={
                 <Row align="middle" justify="space-between">
                     <Col>
-                        <Title level={4}>Title of card 1</Title>
-                        <Text type="secondary">trong danh sách {['To Do Column 01']}</Text>
-                    </Col>
-                    <Col>
-                        <Button icon={<EyeOutlined />}>Theo dõi</Button>
+                        <Title level={4}>{cardData?.name}</Title>
+                        <Text type="secondary">trong danh sách {cardData.column_name}</Text>
                     </Col>
                 </Row>
             }>
@@ -68,7 +68,7 @@ const CardDialog = (props: any) => {
                         <Divider />
                         <div className={cx("new-section")}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Title level={5} style={{margin: '0'}}>Các chức năng cần làm trong đồ án 4</Title>
+                                <Title level={5} style={{ margin: '0' }}>Các chức năng cần làm trong đồ án 4</Title>
                                 <Button>Xóa</Button>
                             </div>
                             <List
@@ -107,7 +107,7 @@ const CardDialog = (props: any) => {
                                             avatar={<Avatar>{ }</Avatar>}
                                             title={
                                                 <Text>
-                                                    <strong>{"Name"}</strong> {"item.content"}
+                                                    <strong>{"Name"}</strong>
                                                 </Text>
                                             }
                                             description={"item.timestamp"}
@@ -120,26 +120,101 @@ const CardDialog = (props: any) => {
 
                     {/* Phần bên phải */}
                     <Col span={8}>
-                        <Button block icon={<UserAddOutlined />} className={cx("button")}>Tham gia</Button>
-                        <Button block icon={<UserOutlined />} className={cx("button")}>Thành viên</Button>
-                        <Button block icon={<TagOutlined />} className={cx("button")}>Nhãn</Button>
-                        <Button block icon={<CheckSquareOutlined />} className={cx("button")}>Việc cần làm</Button>
+                        <Button block icon={<UserAddOutlined />} className={cx("button")}>Rời đi</Button>
+                        <CustomPop title={
+                            <>
+                                <Flex justify='center'>
+                                    Thành viên
+                                </Flex>
+                            </>
+                        } content={
+                            <>
+                                <Flex vertical gap="10px">
+                                    <Input style={{ width: "100%" }} placeholder='Tìm kiếm thành viên trong nhóm' />
+                                    <Menu
+                                        style={{ width: 256 }}
+                                        defaultSelectedKeys={['1']}
+                                        defaultOpenKeys={['sub1']}
+                                        mode="inline"
+                                        items={[
+                                            {
+                                                key: 'grp',
+                                                label: <Text strong>Thành viên trong thẻ</Text>,
+                                                type: 'group',
+                                                children: [
+                                                    {
+                                                        key: '1',
+                                                        label: 'Option 13'
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                key: 'grp',
+                                                label: <Text strong>Thành viên trong bảng</Text>,
+                                                type: 'group',
+                                                children: [
+                                                    {
+                                                        key: '2',
+                                                        label: 'Option 13'
+                                                    },
+                                                ],
+                                            },
+                                        ]}
+                                    />
+                                </Flex>
+                            </>
+                        }>
+                            <Button block icon={<UserOutlined />} className={cx("button")}>
+                                Thành viên
+                            </Button>
+                        </CustomPop>
+                        <CustomPop title={
+                            <>
+                                <Flex justify='center'>
+                                    Việc cần làm
+                                </Flex>
+                            </>
+                        } action={true} content={
+                            <>
+                                <Flex vertical gap="10px" style={{ marginTop: "10px" }}>
+                                    <Text strong>Tiêu đề</Text>
+                                    <Input style={{ width: "300px" }} placeholder='Việc cần làm' />
+                                </Flex>
+                            </>
+                        }>
+                            <Button block icon={<UserOutlined />} className={cx("button")}>
+                                Việc cần làm
+                            </Button>
+                        </CustomPop>
                         <Button block icon={<ClockCircleOutlined />} className={cx("button")} onClick={handleOpenModal}>Ngày</Button>
-                        <Button block icon={<LinkOutlined />} className={cx("button")}>Đính kèm</Button>
-                        <Button block icon={<PictureOutlined />} className={cx("button")}>Ảnh bìa</Button>
-                        <Divider />
-                        <Text strong>Tiện ích bổ sung</Text>
-                        <Button block icon={<PlusOutlined />} className={cx("button")}>Thêm Tiện ích bổ sung</Button>
-                        <Divider />
-                        <Text strong>Tự động hóa</Text>
-                        <Button block icon={<PlusOutlined />} className={cx("button")}>Thêm nút</Button>
-                        <Divider />
-                        <Text strong>Thao tác</Text>
+                        <CustomPop title={
+                            <>
+                                <Flex justify='center'>
+                                    Đính kèm
+                                </Flex>
+                            </>
+                        } action={true} content={
+                            <>
+                                <Flex vertical gap="10px" style={{ marginTop: "10px" }}>
+                                    <Text strong>Đính kèm từ máy tính của bạn</Text>
+                                    <Upload
+                                    // Ẩn danh sách file đã tải lên
+                                    >
+                                        <Button icon={<UploadOutlined />}>
+                                            Chọn tệp
+                                        </Button>
+                                    </Upload>
+                                </Flex>
+                            </>
+                        }>
+                            <Button block icon={<UserOutlined />} className={cx("button")}>
+                                Đính kèm
+                            </Button>
+                        </CustomPop>
+
                         <Button block icon={<ArrowRightOutlined />} className={cx("button")}>Di chuyển</Button>
-                        <Button block icon={<CopyOutlined />} className={cx("button")}>Sao chép</Button>
-                        <Button block icon={<ControlOutlined />} className={cx("button")}>Tạo mẫu</Button>
-                        <Button block icon={<BookOutlined />} className={cx("button")}>Lưu trữ</Button>
-                        <Button block icon={<ShareAltOutlined />} className={cx("button")}>Chia sẻ</Button>
+
+                        <Button block icon={<BookOutlined />} className={cx("button")}>Xóa</Button>
                     </Col>
                 </Row>
             </Modal>

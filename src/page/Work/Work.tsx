@@ -37,7 +37,6 @@ const Work = () => {
   useEffect(() => {
     fetchWorkSapceDetails()
   }, [])
-  console.log()
   return (
     <>
       <ModalCreateColumn isOpenModal={isModalOpen} handleCancel={handleCancel} fetchWorkSapceDetails={fetchWorkSapceDetails} />
