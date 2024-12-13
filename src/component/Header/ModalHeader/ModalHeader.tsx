@@ -25,7 +25,7 @@ const ModalHeader = (props: any) => {
         }
        const responese = await createWorkSpacedAPI(formData)
        console.log(responese)
-        navigate(URL.WORKSPACE+responese.results.workspace_id)
+        navigate(URL.WORKSPACE+responese.workspace_id)
       })
   }
   const handleSubmit = () => {

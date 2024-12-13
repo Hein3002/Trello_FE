@@ -1,4 +1,4 @@
-import { getBoarByIddAPI, updateBoarDetailsdAPI } from "../../services/Board/board.sevice";
+import { getBoarByIdAPI, updateBoarDetailsdAPI } from "../../services/Board/board.sevice";
 import BoardBar from "./BoardBar/BoardBar";
 import { Outlet, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ const BoardDetials = () => {
   const [board, setBoard] = useState<Board>()
   const [cardData, setCardData] = useState<Card>()
   const fetchBoardDetailsAPI = async () => {
-    const response :Board = await getBoarByIddAPI(id);
+    const response :Board = await getBoarByIdAPI(id);
     response?.column?.forEach(column => {
       if (isEmpty(column.card)) {
         column.card = [generatePlaceholderCard(column)]

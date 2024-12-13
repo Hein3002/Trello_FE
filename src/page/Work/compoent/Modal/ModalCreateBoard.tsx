@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { createBoardAPI } from "../../../../services/Board/board.sevice";
 import { PlusOutlined } from '@ant-design/icons'
 import { Board } from "../../../../model/BoardModel";
+import { URL } from "../../../../utils/url";
 
-const ModalCreateColumn = (props: any) => {
-  const { id } = useParams()
+const ModalCreateBoard = (props: any) => {
   const [background, setBackground] = useState<File | null>(null);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -23,13 +23,12 @@ const ModalCreateColumn = (props: any) => {
         if (background && typeof background !== 'string') {
           formData.append('files', background);
         }
-        if (id) {
-          formData.append("workspace_id", id)
+        if (props.id) {
+          formData.append("workspace_id", props.id)
         }
         const reponse = await createBoardAPI(formData)
-        console.log(reponse)
         if (reponse) {
-          props.fetchWorkSapceDetails()
+          navigate(URL.BOARD + reponse.board_id)
           props.handleCancel()
         }
       })
@@ -89,4 +88,4 @@ const ModalCreateColumn = (props: any) => {
 };
 
 
-export default ModalCreateColumn
+export default ModalCreateBoard

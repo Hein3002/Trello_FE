@@ -9,8 +9,7 @@ import Table from "../../component/SymbolicTable/SymbolicTable";
 import { useParams } from "react-router-dom";
 import { getWorkSpacedByIdAPI } from "../../services/WorkSpace/workSapce.service";
 import { useEffect, useState } from "react";
-import { WorkSpace } from "../../model/WorkSpaceModel";
-import ModalCreateColumn from "./compoent/Modal/ModalCreateColumn";
+import ModalCreateBoard from "./compoent/Modal/ModalCreateBoard";
 import { URL } from "../../utils/url";
 
 const { Title, Text } = Typography;
@@ -19,7 +18,7 @@ const cx = classNames.bind(styles);
 
 const Work = () => {
   const { id } = useParams()
-  const [data, setData] = useState<WorkSpace>()
+  const [data, setData] = useState<any>()
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -39,7 +38,7 @@ const Work = () => {
   }, [])
   return (
     <>
-      <ModalCreateColumn isOpenModal={isModalOpen} handleCancel={handleCancel} fetchWorkSapceDetails={fetchWorkSapceDetails} />
+      <ModalCreateBoard isOpenModal={isModalOpen} handleCancel={handleCancel} id={id}/>
       <div className={cx('work-page')}>
         <Row justify='center'>
           <Col span={16}>
@@ -98,8 +97,8 @@ const Work = () => {
               <Flex align="center" gap="10px" wrap>
                 {
                   data?.board && data.board.length > 0
-                    ? data.board.map((item, index) => (
-                      <Table path={URL.BOARD+item.board_id} key={index} title={item.name} />
+                    ? data.board.map((item: any, index: any) => (
+                      <Table path={URL.BOARD + item.board_id} key={index} title={item.name} />
                     ))
                     : []
                 }

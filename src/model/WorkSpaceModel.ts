@@ -4,7 +4,7 @@ export interface WorkSpace {
   workspace_id: string|"",
   name?: string,
   description: string|null,
-  logo?: File|null,
+  background?: File|null,
   status?: string
-  board?:Board[]|[]
+  boards?:Board[]|[]
 };

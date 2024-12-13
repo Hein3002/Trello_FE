@@ -1,6 +1,6 @@
 import { apiServer } from "../../constant/api";
 
-export const getBoarByIddAPI = async (id: any): Promise<any> => {
+export const getBoarByIdAPI = async (id: any): Promise<any> => {
     const res = await apiServer?.get(`/api/board/getbyid/`+id);
     return res?.data;
 };
