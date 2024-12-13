@@ -22,6 +22,7 @@ const Home = () => {
     setCurrentIdWorkSpace(workSapceId)
   };
 
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -62,7 +63,7 @@ const Home = () => {
                   <div className={cx('home-content-middle-main')}>
                     {
                       items?.boards?.map((item: any) => (
-                        <Table path={URL.BOARD + item.board_id} title={item.name} />
+                        <Table key={item.board_id} path={URL.BOARD + item.board_id} title={item.name} />
                       ))
                     }
                     <Button style={{ width: "23.5%", padding: "50px" }} onClick={()=>showModal(items.workspace_id)}>Tạo bảng</Button>

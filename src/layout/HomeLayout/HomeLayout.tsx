@@ -18,11 +18,15 @@ const HomeLayout = () => {
   const [workSpaceGuest, setWorkSpaceGuest] = useState<any[]>([])
   const fetchWorkSapceMemberByUserID = async () => {
     const response = await getWorkSpaceMemberByIdUserAPI()
-    setWorkSpaceMember(response)
+    if (!response.message) {
+      setWorkSpaceMember(response)
+    }
   }
   const fetchWorkSapceGuestByUserID = async () => {
     const response = await getWorkSpaceGuestByIdUserAPI()
-    setWorkSpaceGuest(response)
+    if (!response.message) {
+      setWorkSpaceGuest(response)
+    }
   }
 
   useEffect(() => {
@@ -38,12 +42,12 @@ const HomeLayout = () => {
             <Content >
               <Layout className={cx('home-layout-content')}>
                 <Sider width={260} theme='light' className={cx('home-layout-sidebar')}>
-                  <MenuSibar menuData={workSpaceMember} />
+                  <MenuSibar menuData={workSpaceMember ?? []} />
                 </Sider>
                 <Content className={cx('home-layout-content-main')}>
                   <Outlet context={{
-                    workSpaceMember: workSpaceMember ,
-                    workSpaceGuest:workSpaceGuest
+                    workSpaceMember: workSpaceMember ?? [],
+                    workSpaceGuest: workSpaceGuest ?? []
                   }} />
                 </Content>
               </Layout>

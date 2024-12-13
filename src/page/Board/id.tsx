@@ -109,8 +109,6 @@ const BoardDetials = () => {
     setToggleModal(!toggleModel);
   };
   
-console.log("Board", board)
-
   return (
     <>
       <CardDialog
@@ -118,7 +116,7 @@ console.log("Board", board)
         cardData={cardData}
         handleToggleModal={handleToggleModal}
       />
-      <BoardBar />
+      <BoardBar board={board}/>
       <Row justify="center">
         <Col span={23} >
           <Outlet context={{

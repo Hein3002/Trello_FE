@@ -3,7 +3,6 @@ import style from './BoardBar.module.scss';
 import classNames from "classnames/bind";
 import { FaRegStar } from "react-icons/fa";
 import { IoPeople } from "react-icons/io5";
-import { AntDesignOutlined } from '@ant-design/icons';
 import { MdOutlineRocket, MdOutlineTableView } from "react-icons/md";
 import { AiTwotoneThunderbolt } from "react-icons/ai";
 import { IoFilterSharp } from "react-icons/io5";
@@ -11,15 +10,15 @@ import { IoIosMore } from "react-icons/io";
 import { UserOutlined } from '@ant-design/icons';
 import { Link, useParams } from "react-router-dom";
 import { URL } from "../../../utils/url";
-import CustomDropdow from "../../../component/DropDow/Dropdow";
 import CustomPop from "../../../component/PopConfirm/PopConfirm";
 
 const cx = classNames.bind(style);
 const { Title, Text } = Typography
 
 
-const BoardBar = () => {
+const BoardBar = (props: any) => {
   const { id } = useParams()
+  const guest = props.board?.guest
   return (
     <>
       <Row justify='space-around' className={cx('board-bar')}>
@@ -64,14 +63,15 @@ const BoardBar = () => {
               </Button>
             </Dropdown>
             <Avatar.Group>
-              <Tooltip title="Ant User" placement="top">
-                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-              </Tooltip>
-              <Tooltip title="Ant User" placement="top">
-                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-              </Tooltip>
+              {
+                guest?.map((item:any) => (
+                  <Tooltip title={item?.name} placement="top">
+                    <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+                  </Tooltip>
+                ))
+              }
+
             </Avatar.Group>
-            {/* <CustomDropdow Icon={<IoIosMore size={18} />}  items={boardBarMenu}/> */}
             <CustomPop title=""
               content={
                 <>
@@ -96,7 +96,7 @@ const BoardBar = () => {
                       {
                         key: '1',
                         label: "",
-                        type:"group",
+                        type: "group",
                         children: [
                           {
                             key: '0',

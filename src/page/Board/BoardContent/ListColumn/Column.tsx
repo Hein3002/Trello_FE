@@ -4,17 +4,19 @@ import ListCard from './Column/ListCard/ListCard';
 import { Column as ColumnModel } from '../../../../model/ColumnModel';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Flex, Input, InputRef } from 'antd';
+import { Flex, Input, InputRef, Menu, Typography } from 'antd';
 import { Button } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import { TbCopy } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
 import { useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { IoMdMore } from "react-icons/io";
+import CustomPop from '../../../../component/PopConfirm/PopConfirm';
 
 
 const cx = classNames.bind(styles);
+const { Text } = Typography
 interface Props {
   column: ColumnModel;
 }
@@ -58,9 +60,58 @@ const Column: React.FC<Props> = ({ column }) => {
         <div className={cx('column')} {...listeners}>
           <Flex justify='space-between' align='center' style={{ marginBottom: "5px" }}>
             <Input value={column?.name} className={cx("column-title")} />
-            <Button type='text' shape='circle'>
-              <IoMdMore />
-            </Button>
+            <CustomPop title="" content={
+              <>
+                <Menu
+                  style={{ width: 256 }}
+                  defaultSelectedKeys={['1']}
+                  defaultOpenKeys={['sub1']}
+                  mode="inline"
+                  items={[
+                    {
+                      key: '0',
+                      label: <>
+                        <Flex justify="center">
+                          <Text strong>Thao tác</Text>
+                        </Flex>
+                      </>,
+                      disabled: true
+                    },
+                    {
+                      type: "divider"
+                    },
+                    {
+                      key: '1',
+                      label: "",
+                      type: "group",
+                      children: [
+                        {
+                          key: '0',
+                          icon: <DeleteOutlined />,
+                          label:
+                            <>
+                              <CustomPop action={true} title={<>
+                                  <Flex justify='center'>
+                                    <Text strong>Xác nhận xóa</Text>
+                                  </Flex>
+                                </>}>
+                                <Flex>
+                                  <Text>Xóa cột</Text>
+                                </Flex>
+                              </CustomPop>
+                            </>,
+                        }
+                      ]
+                    }
+
+                  ]}
+                />
+              </>
+            }>
+              <Button type='text' shape='circle'>
+                <IoMdMore />
+              </Button>
+            </CustomPop>
           </Flex>
           <ListCard cards={column?.card} />
           <div className={cx('column-action')}>

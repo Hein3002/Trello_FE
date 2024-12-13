@@ -76,7 +76,6 @@ const BoardContent: React.FC = () => {
 
   };
   const handleDragOver = (event: DragOverEvent) => {
-    console.log(dragItemType)
     if (dragItemType === ACTIVE_ITEM_TYPE.COLUMN) return;
     const { active, over } = event;
     if (!active || !over) return;

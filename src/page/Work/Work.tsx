@@ -11,6 +11,7 @@ import { getWorkSpacedByIdAPI } from "../../services/WorkSpace/workSapce.service
 import { useEffect, useState } from "react";
 import ModalCreateBoard from "./compoent/Modal/ModalCreateBoard";
 import { URL } from "../../utils/url";
+import ModalCreateMember from "./compoent/Modal/ModalCreateMember";
 
 const { Title, Text } = Typography;
 const cx = classNames.bind(styles);
@@ -20,12 +21,15 @@ const Work = () => {
   const { id } = useParams()
   const [data, setData] = useState<any>()
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toggleModal, setToggleModal] = useState(false);
+
+  const handleToggleModal = () => {
+    setToggleModal(!toggleModal);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
   };
-
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -39,6 +43,7 @@ const Work = () => {
   return (
     <>
       <ModalCreateBoard isOpenModal={isModalOpen} handleCancel={handleCancel} id={id}/>
+      <ModalCreateMember toggleModal={toggleModal} handleToggleModal={handleToggleModal}/>
       <div className={cx('work-page')}>
         <Row justify='center'>
           <Col span={16}>
@@ -50,7 +55,7 @@ const Work = () => {
                   <Text strong> <CiLock />{data?.status}</Text>
                 </div>
               </div>
-              <Button type="primary"><IoPersonAddOutline />Mời các thành viên vào không gian làm việc</Button>
+              <Button type="primary" onClick={handleToggleModal}><IoPersonAddOutline />Mời các thành viên vào không gian làm việc</Button>
             </div>
           </Col>
         </Row>

@@ -9,3 +9,7 @@ export const register = async (data: any): Promise<any> => {
     const res = await apiServer?.post(`/api/register`,data);
     return res?.data;
 };
+export const search = async (data: any): Promise<any> => {
+    const res = await apiServer?.post(`/api/search`,data);
+    return res?.data;
+};
