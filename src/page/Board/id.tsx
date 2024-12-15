@@ -1,10 +1,10 @@
-import { getBoarByIdAPI, updateBoarDetailsdAPI } from "../../services/Board/board.sevice";
+import { createGuestdAPI, getBoarByIdAPI, updateBoarDetailsdAPI } from "../../services/Board/board.sevice";
 import BoardBar from "./BoardBar/BoardBar";
 import { Outlet, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Col, Row } from "antd";
+import { Button, Col, Row } from "antd";
 import { Board } from "../../model/BoardModel";
-import { createColumndAPI, updateColumndAPI } from "../../services/Column/Column.service";
+import { createColumndAPI, deleteColumndAPI, updateColumndAPI } from "../../services/Column/Column.service";
 import { Column } from "../../model/ColumnModel";
 import { Card } from "../../model/CardModel";
 import { createCardAPI, getCardByIddAPI } from "../../services/Card/Card.service";
@@ -71,6 +71,12 @@ const BoardDetials = () => {
     }
     updateBoarDetailsdAPI(dataUpdate)
   }
+  const deleteColumn = async(columnId:string) => {
+    const newBoard = {...board}
+    newBoard.column=newBoard.column?.filter((c)=> c.column_id !== columnId)
+    setBoard(newBoard  as Board)
+    await deleteColumndAPI(columnId)
+  }
   //card
   const createNewCard = async (cardData: Card) => {
     const response = await createCardAPI({
@@ -97,17 +103,25 @@ const BoardDetials = () => {
     const result = await getCardByIddAPI(cardId);
     setCardData(result)
   }
+  const deleteCard = async(cardId: string)=> {
+    console.log(cardId)
+  }
 
-  // board.column = mapOrder(board?.columns, board?.columnOrderIds, '_id')
   useEffect(() => {
     fetchBoardDetailsAPI()
   }, [id])
-  // handel modal
+  
   const [toggleModel, setToggleModal] = useState(false);
 
   const handleToggleModal = () => {
     setToggleModal(!toggleModel);
   };
+  const handleCreateGuest = async()=>{
+    const response = await createGuestdAPI({
+      board_id: board?.board_id
+    })
+    console.log(response)
+  }
   
   return (
     <>
@@ -116,17 +130,19 @@ const BoardDetials = () => {
         cardData={cardData}
         handleToggleModal={handleToggleModal}
       />
-      <BoardBar board={board}/>
+      <BoardBar board={board} handleCreateGuest={handleCreateGuest}/>
       <Row justify="center">
         <Col span={23} >
           <Outlet context={{
             board: board,
-            createNewColumn: createNewColumn,
-            createNewCard: createNewCard,
-            moveColumn: moveColumn,
-            handleToggleModal: handleToggleModal,
             fetchCardById: fetchCardById,
-            moveCard: moveCard
+            createNewCard: createNewCard,
+            moveCard: moveCard,
+            deleteCard:deleteCard,
+            createNewColumn: createNewColumn,
+            moveColumn: moveColumn,
+            deleteColumn:deleteColumn,
+            handleToggleModal: handleToggleModal,
           }} />
         </Col>
       </Row>

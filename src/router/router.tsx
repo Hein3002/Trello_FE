@@ -9,10 +9,11 @@ import AuthLayout from "../layout/AuthLayout/AuthLayout";
 import Login from "../page/Auth/Login/Login";
 import BoardContent from "../page/Board/BoardContent/BoardContent";
 import Register from "../page/Auth/Register/Register";
-import ChatApp from "../component/Chat/Chat";
 import Table from "../page/Board/BoardContent/Table/Table";
 import { URL } from "../utils/url";
 import Schedule from "../page/Board/BoardContent/Calender/Calender";
+import TableWorkPage from "../page/Work/compoent/WorkPage/TableWorkPage";
+import MemberWorkPage from "../page/Work/compoent/WorkPage/MemberWorkPage";
 
 
 
@@ -35,7 +36,17 @@ const route = createBrowserRouter([
     children: [
       {
         path: "workspace/:id",
-        element: <Work />
+        element:<Work/>,
+        children:[
+          {
+            path:"",
+            element:<TableWorkPage/>
+          },
+          {
+            path:"member",
+            element:<MemberWorkPage/>
+          }
+        ]
       },
       {
         path: URL.BOARD+":id",
@@ -44,12 +55,6 @@ const route = createBrowserRouter([
           {
             path: "",
             element: <BoardContent/>,
-            children: [
-              {
-                path:"message",
-                element:<ChatApp/>
-              }
-            ]
           },
           {
             path: "calender",
@@ -62,6 +67,10 @@ const route = createBrowserRouter([
         ]
       }
     ]
+  },
+  {
+    path: "*",
+    element:"404"
   },
   {
     element: <AuthLayout />,

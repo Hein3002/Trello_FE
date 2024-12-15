@@ -1,13 +1,17 @@
 import { Avatar, Button, Card, Flex, Input, MenuProps, Space } from "antd";
 import { Link } from "react-router-dom";
 import { Typography } from 'antd';
-import { FaRegBell } from "react-icons/fa";
+import { UserOutlined } from '@ant-design/icons';
 import { IoMdMore } from "react-icons/io";
 import { mockData } from "../../../api/mock-data";
 import { FiMoreVertical } from "react-icons/fi";
 import { IoSearchOutline } from "react-icons/io5";
 
 const { Text, Title } = Typography
+
+
+
+
 export const worksapcesMenuItem: MenuProps['items'] = [
   {
     label:
@@ -197,70 +201,66 @@ export const notificationMenuItem: MenuProps["items"] = [
 
 ]
 
-export const chatMenuItem: MenuProps["items"] = [
-  {
-    label: <>
-      <Flex
-        style={{
-          width: "360px",
-          borderRadius: "5px",
-        }}
-        vertical
-      >
-        <Flex align="center" gap="10px">
-          <Button type="text" shape="circle"><FiMoreVertical /></Button>
-          <Input placeholder="Tìm kiếm" prefix={<IoSearchOutline size={15} />} style={{flex:1, borderRadius: "100px" }}/>
-        </Flex>
-      </Flex>
-    </>,
-    key: '0',
-    disabled: true
-  },
-  {
-    label: <>
-      <Flex
-        style={{
-          width: "360px",
-          borderRadius: "5px",
-        }}
-        vertical
-      >
-        <Flex align="center" gap="20px">
-          <Avatar size="large"/>
-          <Flex justify="center" align="start" vertical style={{flex:1}}>
-            <Title level={5} style={{margin: "0px"}}>Tao la hien</Title>
-            <Text strong type="secondary"> tin vừa gửi</Text>
+export const chatMenuItems = (data: any[], action:(converSation:any)=>void): MenuProps["items"] => [
+    {
+      label: <>
+        <Flex
+          style={{
+            width: "360px",
+            borderRadius: "5px",
+          }}
+          vertical
+        >
+          <Flex align="center" gap="10px">
+            <Button type="text" shape="circle"><FiMoreVertical /></Button>
+            <Input placeholder="Tìm kiếm" prefix={<IoSearchOutline size={15} />} style={{ flex: 1, borderRadius: "100px" }} />
           </Flex>
         </Flex>
-      </Flex>
-    </>,
-    key: '1',
-  },
-  {
-    label: <>
-      <Flex
-        style={{
-          width: "360px",
-          borderRadius: "5px",
-        }}
-        vertical
-      >
-        <Flex align="center" gap="20px">
-          <Avatar size="large"/>
-          <Flex justify="center" align="start" vertical style={{flex:1}}>
-            <Title level={5} style={{margin: "0px"}}>Tao la hien</Title>
-            <Text strong type="secondary"> tin vừa gửi</Text>
-          </Flex>
+      </>,
+      key: '0',
+      disabled: true
+    },
+    ...data.map((item, index) => ({
+      label: <>
+        <Flex
+          style={{
+            width: "360px",
+            borderRadius: "5px",
+          }}
+          vertical
+        >
+          <>
+            <Flex align="center" gap="20px" onClick={()=>action(item)}>
+              {
+                item?.avatar ? (
+                  <Avatar
+                    src={item.avatar}
+                    size="large"
+
+                  />) : (
+                  <Avatar
+                    style={{ backgroundColor: '#87d068' }}
+                    size="large"
+                    icon={<UserOutlined />}
+                  />)
+              }
+              <Flex justify="center" align="start" vertical style={{ flex: 1 }}>
+                <Title level={5} style={{ margin: "0px" }}>{item.name}</Title>
+                <Text strong type="secondary"> tin vừa gửi</Text>
+              </Flex>
+            </Flex>
+          </>
         </Flex>
-      </Flex>
-    </>,
-    key: '2',
-  },
-]
+      </>,
+      key: `${index}`,
+    })),
+  ]
+
+
 export const userMenuItem: MenuProps["items"] = [
   {
     label: <>
-    <Text strong>Tài khoản</Text>
+      <Text strong>Tài khoản</Text>
     </>,
     key: '0',
     disabled: true
@@ -275,13 +275,13 @@ export const userMenuItem: MenuProps["items"] = [
         vertical
       >
         <Link to="/login">
-          <Text>Đăng nhập </Text>     
+          <Text>Đăng nhập </Text>
         </Link>
       </Flex>
     </>,
     key: '1',
   },
- 
+
 ]
 
 

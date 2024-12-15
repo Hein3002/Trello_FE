@@ -7,15 +7,15 @@ import { IoSearchOutline } from "react-icons/io5";
 import { UserOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import MenuHeader from "../DropDow/Dropdow";
-import { chatMenuItem, notificationMenuItem, recentlyMenuItem, starMenuItem, userMenuItem, worksapcesMenuItem } from "./MenuItem/MenuItem";
+import { notificationMenuItem, recentlyMenuItem, starMenuItem, userMenuItem, worksapcesMenuItem } from "./MenuItem/MenuItem";
 import { FaRegBell } from "react-icons/fa";
-import { BiMessageRounded } from "react-icons/bi";
 import ModalHeader from "./ModalHeader/ModalHeader";
 import { useState } from "react";
+import Conversation from "../ConverStation/ConverStation";
 
 const cx = classNames.bind(styles);
 
-const Header = () => {
+const Header = (props:any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -63,7 +63,7 @@ const Header = () => {
                 <Badge dot>
                   <FaRegBell size={18} />
                 </Badge>} items={notificationMenuItem} />
-              <MenuHeader Icon={<BiMessageRounded size={20} />} items={chatMenuItem} />
+              <Conversation handleOPenChat={props.handleOPenChat}/>
               <MenuHeader Icon={<Avatar shape="circle" size="small" icon={<UserOutlined />} />} items={userMenuItem} />
             </Flex>
           </Col>

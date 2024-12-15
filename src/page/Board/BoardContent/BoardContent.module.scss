@@ -54,6 +54,15 @@
       overflow-x: hidden;   
       
       &-item {
+        .btn-edit{
+          visibility: hidden;
+          transition: all 0.01s;
+        }
+        &:hover{
+          .btn-edit{
+            visibility: visible;
+          }
+        }
         .card-action {
          gap: 20px;
          &-deadline {

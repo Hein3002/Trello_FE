@@ -51,11 +51,9 @@ const BoardBar = (props: any) => {
                 <MdOutlineRocket size={18} />
               </Button>
             </Dropdown>
-            <Dropdown trigger={['click']}>
-              <Button type="text" shape="circle">
-                <AiTwotoneThunderbolt size={18} />
-              </Button>
-            </Dropdown>
+            <Button type="text" shape="circle" onClick={()=>props.handleCreateGuest()}>
+              <AiTwotoneThunderbolt size={18} />
+            </Button>
             <Dropdown trigger={['click']}>
               <Button type="text">
                 <IoFilterSharp size={18} />
@@ -64,7 +62,7 @@ const BoardBar = (props: any) => {
             </Dropdown>
             <Avatar.Group>
               {
-                guest?.map((item:any) => (
+                guest?.map((item: any) => (
                   <Tooltip title={item?.name} placement="top">
                     <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
                   </Tooltip>

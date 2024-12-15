@@ -2,6 +2,7 @@ import { useDebounce } from '@uidotdev/usehooks';
 import { Avatar, Flex, Input, List, Modal, Spin, Typography, Tag, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { search } from '../../../../services/User/user.service';
+import { createMemberdAPI } from '../../../../services/WorkSpace/workSapce.service';
 
 const { Title, Text } = Typography;
 
@@ -24,6 +25,7 @@ const ModalCreateMember = (props: any) => {
     }
   };
 
+
   useEffect(() => {
     if (debouncedSearch.length > 2) {
       fetchSearchUser();
@@ -43,7 +45,13 @@ const ModalCreateMember = (props: any) => {
   const handleRemoveUser = (email: string) => {
     setSelectedUsers(selectedUsers.filter(user => user.email !== email)); // Loại bỏ mục được click
   };
-
+  const handleCreateMember = async()=> {
+    const response = await createMemberdAPI({
+      user_id:selectedUsers.map(item=>item.user_id).toString(),
+      workspace_id:props.id
+    })
+    props.handleToggleModal()
+  }
   return (
     <>
       <Modal
@@ -77,7 +85,7 @@ const ModalCreateMember = (props: any) => {
               onChange={(e) => setSearchEmail(e.target.value)}
             />
             {
-              (selectedUsers.length >0) && <Button type='primary'>Mời</Button>
+              (selectedUsers.length >0) && <Button type='primary' onClick={handleCreateMember}>Mời</Button>
             }
           </Flex>
 

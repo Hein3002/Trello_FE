@@ -1,12 +1,13 @@
-import { Card as CardAntd } from "antd";
-import { CommentOutlined, EyeOutlined, FileTextOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card as CardAntd, Flex, Input, Typography } from "antd";
+import { CommentOutlined, EditOutlined, EyeOutlined, FileTextOutlined, UserOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import styles from '../../../../BoardContent.module.scss';
 import { Card as CardModel } from "../../../../../../../model/CardModel";
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
+import CustomPop from "../../../../../../../component/PopConfirm/PopConfirm";
+import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -14,9 +15,14 @@ interface Props {
   action?: boolean;
   card: CardModel;
 }
+const {Text} =Typography
 
-const Card: React.FC<Props> = ({ action = false, card}) => {
-  const {handleToggleModal, fetchCardById} = useOutletContext<{handleToggleModal:any, fetchCardById:any}>()
+const Card: React.FC<Props> = ({ action = false, card }) => {
+  const {
+    handleToggleModal,
+    fetchCardById
+  } = useOutletContext<{ handleToggleModal: any, fetchCardById: any }>()
+  const [toggleEditCard, setToggleEditCard] = useState<boolean>(false)
   const {
     attributes,
     listeners,
@@ -32,28 +38,30 @@ const Card: React.FC<Props> = ({ action = false, card}) => {
     opacity: isDragging ? 0.5 : undefined,
     border: isDragging ? '3px solid #81ecec' : undefined,
     width: "100%",
+    padding:card?.FE_PlaceholderCard ? "0px" :"10px",
     visibility: card?.FE_PlaceholderCard ? "hidden" : "visibility",
     // display: card?.FE_PlaceholderCard ? "none" : "block",
   };
-  
-  const handleOpenModal = (cardId:any) => {
+
+  const handleOpenModal = (cardId: any) => {
     handleToggleModal()
     fetchCardById(cardId)
   }
-   useEffect(()=> {
-   },[card])
-
+  const handleEditCard = (e: any) => {
+    e.stopPropagation()
+    setToggleEditCard(!toggleEditCard)
+  }
 
   return (
     <>
-   
+
       <CardAntd
         ref={setNodeRef} style={style} {...attributes} {...listeners}
-        className={cx('list-card-item')}        
+        className={cx('list-card-item')}
 
         styles={{
           body: {
-            padding: '10px'
+            padding: '0px'
           }
         }}
         cover={card?.background ?
@@ -62,11 +70,31 @@ const Card: React.FC<Props> = ({ action = false, card}) => {
             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
           /> : null
         }
-        onClick={ ()=>handleOpenModal(card.card_id)}
+        onClick={() => handleOpenModal(card.card_id)}
 
       >
-        {card?.name}
+        <Flex align="center" justify="space-between" gap="10px">
+          {
+            toggleEditCard ? (
+              <Input value={card?.name} onClick={(e)=>e.stopPropagation()}/>
+            ) : (
+              <>
+                <Text style={{marginLeft:"5px"}}>{card?.name}</Text>
+              </>
+            )
+          }
 
+          <CustomPop>
+            <Button
+              type="text"
+              shape="circle"
+              className={cx("btn-edit")}
+              onClick={(e) => handleEditCard(e)}
+            >
+              <EditOutlined />
+            </Button>
+          </CustomPop>
+        </Flex>
         {
           action ? (
             <div className={cx('flex', 'card-action')}>
@@ -78,6 +106,15 @@ const Card: React.FC<Props> = ({ action = false, card}) => {
               <FileTextOutlined />
             </div>
           ) : <></>
+        }
+        {
+          card?.userjoin && (
+            <>
+              <Flex justify="end">
+                <Avatar style={{ backgroundColor: '#87d068' }}><UserOutlined /></Avatar>
+              </Flex>
+            </>
+          )
         }
 
       </CardAntd >

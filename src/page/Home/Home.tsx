@@ -46,7 +46,7 @@ const Home = () => {
               Các không gian làm việc
             </Title>
             {
-              workSpaceMember?.map((items: any) => (
+              workSpaceMember?.map((items: any, index:any) => (
                 <div key={items.workspace_id}>
                   <div className={cx('home-content-action')}>
                     <Title level={5} className={cx('home-content-title')}>
@@ -79,14 +79,14 @@ const Home = () => {
             </Title>
             {
               workSpaceGuest?.map((items: any) => (
-                <div key={items.workspace_id}>
-                  <Title level={5} className={cx('home-content-title')}>
+                <div>
+                  <Title key={items?.workspace_id} level={5} className={cx('home-content-title')}>
                     <FaRegClock />
                     {items.workspace_name}
                   </Title>
                   {
                     items.boards.map((item: any) => (
-                      <div className={cx('home-content-bottom-main')}>
+                      <div key={item.board_id} className={cx('home-content-bottom-main')}>
                         <Table path={URL.BOARD + item.board_id} title={item.name} />
                       </div>
                     ))

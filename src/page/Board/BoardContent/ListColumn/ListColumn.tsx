@@ -52,6 +52,7 @@ const ListColumn: React.FC<Props> = ({ columns }) => {
                   <Input placeholder="Enter column name"
                   ref={inputRef}
                     variant="outlined"
+                    data-no-dnd="true"
                     size="large"
                     autoFocus
                     required
@@ -59,7 +60,7 @@ const ListColumn: React.FC<Props> = ({ columns }) => {
                     value={title} onChange={(e) => setTitle(e.target.value)}
                   />
                   <Flex gap="10px">
-                    <Button type='primary' style={{ width: "40%" }} onClick={handleAddNewColumn}>Add</Button>
+                    <Button type='primary' data-no-dnd="true" style={{ width: "40%" }} onClick={handleAddNewColumn}>Add</Button>
                     <CloseOutlined onClick={toggleOpenNewColumnForm} />
                   </Flex>
                 </Flex>)

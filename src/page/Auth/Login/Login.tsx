@@ -4,6 +4,8 @@ import { Form, Input, Typography, Button, FormProps } from "antd";
 import { FcGoogle } from "react-icons/fc";
 import { login } from '../../../services/User/user.service';
 import { useNavigate } from 'react-router-dom';
+import { URL } from './../../../utils/url';
+import { useAuthStore } from '../../../store/authStore';
 
 const cx = classNames.bind(styles);
 const { Title } = Typography;
@@ -17,11 +19,13 @@ type FieldType = {
 const Login = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const setId = useAuthStore((state) => state.setId);
   
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
       const response = await login(values)
       if(response){
-        navigate("/")
+        localStorage.setItem("user_id",response.user_id)
+        navigate(URL.HOME)
       }
   };
 

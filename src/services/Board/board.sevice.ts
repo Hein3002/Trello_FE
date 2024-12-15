@@ -12,3 +12,7 @@ export const updateBoarDetailsdAPI = async (data: any): Promise<any> => {
     const res = await apiServer?.post(`/api/board/updatewhenmovecolumn`, data);
     return res?.data;
 };
+export const createGuestdAPI = async (data: any): Promise<any> => {
+    const res = await apiServer?.post(`/api/board/createguest`, data);
+    return res?.data;
+};

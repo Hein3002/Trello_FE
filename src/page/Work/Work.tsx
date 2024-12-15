@@ -6,7 +6,7 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
 import { Avatar, Typography, Button, Row, Col, Select, Flex, Input } from 'antd';
 import Table from "../../component/SymbolicTable/SymbolicTable";
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { getWorkSpacedByIdAPI } from "../../services/WorkSpace/workSapce.service";
 import { useEffect, useState } from "react";
 import ModalCreateBoard from "./compoent/Modal/ModalCreateBoard";
@@ -43,7 +43,7 @@ const Work = () => {
   return (
     <>
       <ModalCreateBoard isOpenModal={isModalOpen} handleCancel={handleCancel} id={id}/>
-      <ModalCreateMember toggleModal={toggleModal} handleToggleModal={handleToggleModal}/>
+      <ModalCreateMember toggleModal={toggleModal} handleToggleModal={handleToggleModal} id={id}/>
       <div className={cx('work-page')}>
         <Row justify='center'>
           <Col span={16}>
@@ -60,59 +60,11 @@ const Work = () => {
           </Col>
         </Row>
         <hr />
-        <Row justify='center'>
-          <Col span={22}>
-            <Title level={4}
-              style={{ margin: '0 0 30px' }}>
-              Bảng
-            </Title>
-            <Flex vertical gap={30}>
-              <Flex justify="space-between">
-                <Flex gap={10}>
-                  <Flex vertical>
-                    <Text strong>Sắp sếp theo</Text>
-                    <Select
-                      placeholder="Hoạt động gần đây nhất"
-                      className={cx('select-tag')}
-                      options={[
-                        { value: 'jack', label: 'Jack' },
-                        { value: 'lucy', label: 'Lucy' },
-                        { value: 'Yiminghe', label: 'yiminghe' },
-                      ]}
-                    />
-                  </Flex>
-                  <Flex vertical>
-                    <Text strong>Sắp sếp theo</Text>
-                    <Select
-                      placeholder="Hoạt động gần đây nhất"
-                      className={cx('select-tag')}
-                      options={[
-                        { value: 'jack', label: 'Jack' },
-                        { value: 'lucy', label: 'Lucy' },
-                        { value: 'Yiminghe', label: 'yiminghe' },
-                      ]}
-                    />
-                  </Flex>
-                </Flex>
-                <Flex vertical justify="center">
-                  <Text strong>Tìm kiếm</Text>
-                  <Input placeholder="Tìm kiếm" prefix={<IoSearchOutline size={15} />} />
-                </Flex>
-              </Flex>
-              <Flex align="center" gap="10px" wrap>
-                {
-                  data?.board && data.board.length > 0
-                    ? data.board.map((item: any, index: any) => (
-                      <Table path={URL.BOARD + item.board_id} key={index} title={item.name} />
-                    ))
-                    : []
-                }
-                <Button style={{ width: "23.5%", padding: "50px" }} onClick={showModal}>Tạo bảng</Button>
-              </Flex>
-              <Button type="text" className={cx('btn')}>Xem tất cả các bảng đã đóng</Button>
-            </Flex>
-          </Col>
-        </Row>
+        <Outlet context={{
+          data:data,
+          showModal:showModal
+        }}
+        />
       </div>
     </>
   );

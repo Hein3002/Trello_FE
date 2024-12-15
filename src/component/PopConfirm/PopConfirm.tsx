@@ -5,10 +5,11 @@ type CustomPopProps = {
   children: ReactNode;
   content?: ReactNode;
   title?: ReactNode;
-  action?: boolean
+  action?: boolean;
+  handleFunction?:()=>void
 };
 
-const CustomPop: React.FC<CustomPopProps> = ({ children, content, title, action = false }) => {
+const CustomPop: React.FC<CustomPopProps> = ({ children, content, title, action = false, handleFunction }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -19,10 +20,11 @@ const CustomPop: React.FC<CustomPopProps> = ({ children, content, title, action 
   const handleOk = () => {
     setConfirmLoading(true);
 
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
+    if(handleFunction){
+      handleFunction()
+    }
+    setOpen(false);
+    setConfirmLoading(false);
   };
 
   const handleCancel = () => {

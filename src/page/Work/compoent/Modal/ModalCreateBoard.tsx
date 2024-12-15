@@ -29,6 +29,7 @@ const ModalCreateBoard = (props: any) => {
         const reponse = await createBoardAPI(formData)
         if (reponse) {
           navigate(URL.BOARD + reponse.board_id)
+          form.resetFields()
           props.handleCancel()
         }
       })

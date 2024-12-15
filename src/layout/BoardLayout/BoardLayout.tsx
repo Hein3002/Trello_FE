@@ -8,37 +8,48 @@ import {
 } from '@ant-design/icons';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
 import HeaderBoard from '../../component/Header/Header';
+import ChatApp from '../../component/Chat/Chat';
 
 const cx = classNames.bind(styles);
 const items = [
   {
     key: '1',
     icon: <UserOutlined />,
-    label: 'nav 1',
-    children: [
-      {
-        key: '1-1',
-        label: "hiển"
-      }
-    ]
-  }
+    label: 'Bảng',
+
+  },
+  {
+    key: '2',
+    icon: <UserOutlined />,
+    label: 'Thành viên',
+
+  },
 ];
 const { Title } = Typography;
 const { Sider, Content } = Layout;
 const BoardLayout = () => {
+  const [isopenChat, setIsOpenChat] = useState(false)
+  const [converSation, setConverSation] = useState<any>()
   const [collapsed, setCollapsed] = useState(false);
+  const handleOPenChat = (converSation:any)=> {
+    setIsOpenChat(true)
+    setConverSation(converSation)
+  }
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
     <>
-      <HeaderBoard />
+      <HeaderBoard handleOPenChat={handleOPenChat}/>
+      {
+        isopenChat && <ChatApp converSation={converSation}/>
+      }
       <Layout className={cx('layout')}>
         <Sider trigger={null} collapsible collapsed={collapsed} theme='light' width={260} className={cx('sidebar')}>
           {
             collapsed ? (
               <Flex align='center' justify='center'>
-                 <Button onClick={() => setCollapsed(!collapsed)} type='text' className={cx('btn')}><RiArrowDropRightLine size={30} /> </Button>
+                <Button onClick={() => setCollapsed(!collapsed)} type='text' className={cx('btn')}><RiArrowDropRightLine size={30} /> </Button>
               </Flex>
             ) : (
               <Flex align='center' className={cx('sidebar-top')} gap={5}>

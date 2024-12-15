@@ -37,7 +37,7 @@ const Column: React.FC<Props> = ({ column }) => {
     opacity: isDragging ? 0.5 : undefined,
     height: '100%',
   };
-  const { createNewCard } = useOutletContext<{ createNewCard: any }>()
+  const { createNewCard, deleteColumn } = useOutletContext<{ createNewCard: any, deleteColumn:any }>()
   const [openNewCardform, setOpenNewCardForm] = useState(false)
   const [cardName, setCardName] = useState<string | "">("")
   const inputRef = useRef<InputRef>(null)
@@ -54,12 +54,15 @@ const Column: React.FC<Props> = ({ column }) => {
     setCardName("")
     inputRef.current?.focus()
   }
+  const handleDeleteColumn = (columnId:string)=> {
+    deleteColumn(columnId)
+  }
   return (
     <>
       <div ref={setNodeRef}  {...attributes} style={style}>
         <div className={cx('column')} {...listeners}>
           <Flex justify='space-between' align='center' style={{ marginBottom: "5px" }}>
-            <Input value={column?.name} className={cx("column-title")} />
+            <Input value={column?.name} data-no-dnd="true" className={cx("column-title")} />
             <CustomPop title="" content={
               <>
                 <Menu
@@ -90,15 +93,9 @@ const Column: React.FC<Props> = ({ column }) => {
                           icon: <DeleteOutlined />,
                           label:
                             <>
-                              <CustomPop action={true} title={<>
-                                  <Flex justify='center'>
-                                    <Text strong>Xác nhận xóa</Text>
-                                  </Flex>
-                                </>}>
-                                <Flex>
-                                  <Text>Xóa cột</Text>
-                                </Flex>
-                              </CustomPop>
+                              <Flex style={{width:"100%"}}>
+                                <Text style={{width:"100%"}} onClick={()=>handleDeleteColumn(column.column_id)}>Xóa cột</Text>
+                              </Flex>
                             </>,
                         }
                       ]
@@ -126,16 +123,15 @@ const Column: React.FC<Props> = ({ column }) => {
                     ref={inputRef}
                     placeholder="Basic usage"
                     autoFocus variant="outlined"
+                    data-no-dnd="true"
                     size="large" style={{ width: "100%" }}
                     value={cardName}
                     onChange={(e) => setCardName(e.target.value)}
                   />
-                  <Button type='primary' onClick={handleAddNewCard}>Add</Button>
+                  <Button type='primary' data-no-dnd="true" onClick={handleAddNewCard}>Add</Button>
                   <CloseOutlined onClick={toggleOpenNewCardForm} />
                 </Flex>)
             }
-
-
           </div>
         </div>
       </div>

@@ -12,10 +12,8 @@ import {
   DragStartEvent,
   DropAnimation,
   getFirstCollision,
-  MouseSensor,
   PointerSensor,
   pointerWithin,
-  TouchSensor,
   useSensor,
   useSensors
 } from "@dnd-kit/core";
@@ -29,6 +27,7 @@ import Column from './ListColumn/Column';
 import Card from './ListColumn/Column/ListCard/Card/Card';
 import { Outlet, useOutletContext } from 'react-router-dom';
 import { generatePlaceholderCard } from '../../../utils/format';
+import { MouseSensor, TouchSensor } from '../../../customLibrary';
 const cx = classNames.bind(styles);
 type UniqueIdentifier = string | number;
 const ACTIVE_ITEM_TYPE = {

@@ -4,4 +4,5 @@ export const URL = {
   REGISTER: '/register',
   BOARD: '/board/',
   WORKSPACE: '/workspace/',
+  MESSAGE:'message'
 }
