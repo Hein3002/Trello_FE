@@ -1,4 +1,4 @@
-import { Form, FormProps, Input, Modal, Upload } from "antd"
+import { Form, FormProps, Input, Modal, Select, Upload } from "antd"
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { createBoardAPI } from "../../../../services/Board/board.sevice";
@@ -28,7 +28,7 @@ const ModalCreateBoard = (props: any) => {
         }
         const reponse = await createBoardAPI(formData)
         if (reponse) {
-          navigate(URL.BOARD + reponse.board_id)
+          navigate("/workspace/" + props.id + URL.BOARD + reponse.board_id)
           form.resetFields()
           props.handleCancel()
         }
@@ -63,7 +63,14 @@ const ModalCreateBoard = (props: any) => {
             name="status"
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input placeholder='Trạng thái' />
+            <Select
+              placeholder="Chọn trạng thái"
+              options={[
+                { value: 'Riêng tư', label: 'Riêng tư' },
+                { value: 'Không gian làm việc', label: 'Không gian làm việc' },
+                { value: 'Công khai', label: 'Công khai' },
+              ]}
+            />
           </Form.Item>
 
           <Form.Item<Board>

@@ -121,14 +121,14 @@ const Column: React.FC<Props> = ({ column }) => {
                 : (<Flex gap="10px" justify='center' align='center'>
                   <Input
                     ref={inputRef}
-                    placeholder="Basic usage"
+                    placeholder="Nhập tên thẻ"
                     autoFocus variant="outlined"
                     data-no-dnd="true"
                     size="large" style={{ width: "100%" }}
                     value={cardName}
                     onChange={(e) => setCardName(e.target.value)}
                   />
-                  <Button type='primary' data-no-dnd="true" onClick={handleAddNewCard}>Add</Button>
+                  <Button type='primary' data-no-dnd="true" onClick={handleAddNewCard}>Thêm thẻ</Button>
                   <CloseOutlined onClick={toggleOpenNewCardForm} />
                 </Flex>)
             }

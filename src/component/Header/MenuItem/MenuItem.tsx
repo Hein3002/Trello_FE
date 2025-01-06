@@ -10,8 +10,6 @@ import { IoSearchOutline } from "react-icons/io5";
 const { Text, Title } = Typography
 
 
-
-
 export const worksapcesMenuItem: MenuProps['items'] = [
   {
     label:
@@ -234,7 +232,7 @@ export const chatMenuItems = (data: any[], action:(converSation:any)=>void): Men
               {
                 item?.avatar ? (
                   <Avatar
-                    src={item.avatar}
+                    src={item?.avatar.replace("D:\\DA4\\frontend\\", "")}
                     size="large"
 
                   />) : (
@@ -246,7 +244,7 @@ export const chatMenuItems = (data: any[], action:(converSation:any)=>void): Men
               }
               <Flex justify="center" align="start" vertical style={{ flex: 1 }}>
                 <Title level={5} style={{ margin: "0px" }}>{item.name}</Title>
-                <Text strong type="secondary"> tin vừa gửi</Text>
+                <Text strong type="secondary">{item.message}</Text>
               </Flex>
             </Flex>
           </>
@@ -275,7 +273,7 @@ export const userMenuItem: MenuProps["items"] = [
         vertical
       >
         <Link to="/login">
-          <Text>Đăng nhập </Text>
+          <Text>Đăng xuất </Text>
         </Link>
       </Flex>
     </>,

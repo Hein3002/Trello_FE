@@ -25,7 +25,7 @@ import { Column as ColumnModel } from '../../../model/ColumnModel';
 import { Card as CardModel } from '../../../model/CardModel';
 import Column from './ListColumn/Column';
 import Card from './ListColumn/Column/ListCard/Card/Card';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import { generatePlaceholderCard } from '../../../utils/format';
 import { MouseSensor, TouchSensor } from '../../../customLibrary';
 const cx = classNames.bind(styles);
@@ -36,7 +36,7 @@ const ACTIVE_ITEM_TYPE = {
 };
 
 const BoardContent: React.FC = () => {
-  const { board, moveCard } = useOutletContext<{ board: Board, moveCard: any }>();
+  const { board, moveCard, boardFilter } = useOutletContext<{ board: Board, moveCard: any, boardFilter: any }>();
   const [sortedColumn, setSortedColumn] = useState<ColumnModel[]>([]);
   const [dragItemType, setDragItemType] = useState<string | null>(null);
   const [dragItemId, setDragItemId] = useState<ColumnModel["column_id"] | CardModel["card_id"] | null>(null);
@@ -50,10 +50,18 @@ const BoardContent: React.FC = () => {
   const { moveColumn } = useOutletContext<{ moveColumn: any }>()
 
   useEffect(() => {
-    if (board?.column) {
+    if (!(boardFilter.length == 0)) {
+      if (boardFilter?.column) {
+        setSortedColumn(boardFilter?.column);
+      }
+    }
+    else if (board?.column) {
       setSortedColumn(board?.column);
     }
-  }, [board]);
+
+
+  }, [board, boardFilter]);
+
   const dropAnimation: DropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
       styles: {
@@ -186,7 +194,7 @@ const BoardContent: React.FC = () => {
     if (dragItemType === ACTIVE_ITEM_TYPE.COLUMN) {
       if (active.id !== over.id) {
         const oldIndex = sortedColumn.findIndex(column => column.column_id === active.id);
-        const newIndex = sortedColumn.findIndex(column => column.column_id === over.id);        
+        const newIndex = sortedColumn.findIndex(column => column.column_id === over.id);
         const dndSortedColumn = arrayMove(sortedColumn, oldIndex, newIndex);
         setSortedColumn(dndSortedColumn)
         moveColumn(dndSortedColumn)

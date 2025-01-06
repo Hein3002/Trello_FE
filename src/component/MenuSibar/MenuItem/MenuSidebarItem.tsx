@@ -7,6 +7,11 @@ import { MdOutlineTableView } from "react-icons/md";
 import { MdOutlineTableChart } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { URL } from '../../../utils/url';
+import {
+  SettingOutlined,
+  TableOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -32,7 +37,7 @@ export const MenuSideBarItem = (data: any[]): MenuItem[] => [
         icon: <MdOutlineTableChart size={20} />,
         label:
           <>
-            <Text strong>Trang trủ</Text>
+            <Text strong>Trang chủ</Text>
           </>
       },
     ],
@@ -46,7 +51,7 @@ export const MenuSideBarItem = (data: any[]): MenuItem[] => [
       <>
         <Flex justify="start" align="center" gap="10px">
           <img
-            src="src/assets/image/avatar.jpg"
+            src={workspace?.logo.replace("D:\\DA4\\frontend\\", "")}
             alt=""
             style={{
               width: '30px',
@@ -62,31 +67,29 @@ export const MenuSideBarItem = (data: any[]): MenuItem[] => [
     children: [
       {
         key: `${index}-1`,
-        icon: <MdOutlineTableView size={18} />,
+        icon: <TableOutlined size={18} />,
         label: (
           <>
-            <Text>Bảng</Text>
-          </>
-        ),
-      },
-      {
-        key: `${index}-2`,
-        icon: <FaTableList size={14} />,
-        label: (
-          <>
-            <Text>Hình</Text>
+            <Link to={"workspace/" + workspace.workspace_id}>Bảng</Link>
           </>
         ),
       },
       {
         key: `${index}-3`,
-        icon: <FaTableList size={14} />,
+        icon: <UserOutlined size={14} />,
         label: (
           <>
-            <Link to={`${URL.WORKSPACE}${workspace.workspace_id}`}>
-              <Text>Thành viên</Text>
-            </Link>
+            <Link to={"workspace/" + workspace.workspace_id + "/member"}>Thành viên</Link>
           </>
+        ),
+      },
+      {
+        key: `${index}-2`,
+        icon: <SettingOutlined size={14}/>,
+        label: (
+          <>
+            <Link to={"workspace/" + workspace.workspace_id + "/setting"}>Cài đặt</Link>
+            </>
         ),
       },
     ],

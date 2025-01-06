@@ -99,7 +99,7 @@ const ModalCreateMember = (props: any) => {
                 renderItem={(item: any) => (
                   <List.Item onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
                     <Flex align='center' gap="10px">
-                      <Avatar src={item.avatar} />
+                      <Avatar src={item.avatar.replace("D:\\DA4\\frontend\\", "")} />
                       <Text strong>{item.name}</Text>
                     </Flex>
                   </List.Item>

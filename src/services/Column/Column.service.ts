@@ -13,3 +13,8 @@ export const deleteColumndAPI = async (id: any): Promise<any> => {
     const res = await apiServer?.delete(`/api/column/delete/`+ id);
     return res?.data;
 };
+
+export const getAllColumnByBoardIdAPI = async (id: any): Promise<any> => {
+    const res = await apiServer?.get(`/api/column/getallbyboardid/`+ id);
+    return res?.data;
+};

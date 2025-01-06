@@ -49,7 +49,7 @@ const ListColumn: React.FC<Props> = ({ columns }) => {
                   gap="10px"
                   className={cx("column")}
                   style={{ height: "fit-content" }}>
-                  <Input placeholder="Enter column name"
+                  <Input placeholder="Nhập tên danh sách"
                   ref={inputRef}
                     variant="outlined"
                     data-no-dnd="true"
@@ -60,11 +60,11 @@ const ListColumn: React.FC<Props> = ({ columns }) => {
                     value={title} onChange={(e) => setTitle(e.target.value)}
                   />
                   <Flex gap="10px">
-                    <Button type='primary' data-no-dnd="true" style={{ width: "40%" }} onClick={handleAddNewColumn}>Add</Button>
+                    <Button type='primary' data-no-dnd="true" style={{ width: "40%" }} onClick={handleAddNewColumn}>Thêm danh sách</Button>
                     <CloseOutlined onClick={toggleOpenNewColumnForm} />
                   </Flex>
                 </Flex>)
-                : <Button onClick={toggleOpenNewColumnForm}>Add Column</Button>
+                : <Button onClick={toggleOpenNewColumnForm}>+ Thêm danh sách khác</Button>
               }
             </Flex>
           </Col>

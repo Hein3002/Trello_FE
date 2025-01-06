@@ -25,6 +25,8 @@ const Login = () => {
       const response = await login(values)
       if(response){
         localStorage.setItem("user_id",response.user_id)
+        localStorage.setItem("user_name",response.name)
+        localStorage.setItem("user_avatar",response.avatar.replace("D:\\DA4\\frontend\\", ""))
         navigate(URL.HOME)
       }
   };

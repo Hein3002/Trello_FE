@@ -21,3 +21,7 @@ export const deleteCheckListAPI = async (id: any): Promise<any> => {
     const res = await apiServer?.delete(`/api/checklist/delete/`+id);
     return res?.data;
 };
+export const updateCheckListAPI = async (id: any, data: any): Promise<any> => {
+    const res = await apiServer?.post(`/api/checklist/update/`+id, data);
+    return res?.data;
+};

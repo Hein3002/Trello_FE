@@ -1,4 +1,4 @@
-import { Button, Col, Modal, Row, Typography, Input, Divider, Avatar, List, Checkbox, Flex, Menu, Upload } from 'antd';
+import { Button, Col, Modal, Row, Typography, Input, Divider, Avatar, List, Checkbox, Flex, Menu, Upload, Space } from 'antd';
 import styles from './CardDialog.module.scss';
 import classNames from "classnames/bind";
 import { useEffect, useState } from 'react';
@@ -6,21 +6,21 @@ import DateModal from './DateModal/DateModal';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {
-    ArrowRightOutlined,
     BookOutlined,
     CheckSquareOutlined,
     ClockCircleOutlined,
     DeleteOutlined,
-    EllipsisOutlined,
+    LinkOutlined,
     UploadOutlined,
     UserAddOutlined,
+    UserDeleteOutlined,
     UserOutlined
 } from '@ant-design/icons';
 import CustomPop from './../PopConfirm/PopConfirm';
-import { createCheckListAPI, createCheckListNameAPI, deleteCheckListAPI, deleteCheckListNameAPI } from '../../services/CheckList/CheckList.service';
-import { isArray } from 'lodash';
-import { createFileAPI } from '../../services/File/File.sevice';
-import { updateUserJoinCardAPI, updateUserOutCardAPI } from '../../services/Card/Card.service';
+import { createCheckListAPI, createCheckListNameAPI, deleteCheckListAPI, deleteCheckListNameAPI, updateCheckListAPI } from '../../services/CheckList/CheckList.service';
+import { createFileAPI, deleteFileAPI } from '../../services/File/File.sevice';
+import { deleteCardByIdAPI, updateInformationCard, updateUserJoinCardAPI, updateUserOutCardAPI } from '../../services/Card/Card.service';
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -36,28 +36,44 @@ const CardDialog = (props: any) => {
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [userAvatar, setUserAvatar] = useState<any>(null);
+    const [userName, setUserName] = useState<any>(null);
+    const [description, setDescription] = useState("");
+
+    const filteredGuests = props?.board?.guest?.filter(
+        (guest: any) => !data?.userjoin?.some((user: any) => user.user_id === guest.user_id)
+    );
+
+    useEffect(() => {
+        const avatar = localStorage.getItem("user_avatar");
+        const name = localStorage.getItem("user_name");
+        if (avatar && name) {
+            setUserAvatar(avatar);
+            setUserName(name);
+        }
+    }, []);
 
     const handleUploadChange = async (info: any) => {
         // Lấy danh sách file từ event
         const formData = new FormData()
-        const { fileList } = info;
+        // const { fileList } = info;
 
         // Cập nhật state
-        setUploadedFiles(fileList);
+        setUploadedFiles(info);
 
         // Log danh sách file nếu cần
-        if (fileList && typeof fileList != "string") {
-            formData.append("path", fileList)
+        if (info && typeof info != "string") {
+            formData.append("files", info)
             formData.append("card_id", data.card_id)
         }
         const responese = await createFileAPI(formData)
-        console.log(responese)
+        const newData = { ...data }
+        newData.file.push(responese)
+        setData(newData)
     };
 
-    const [description, setDescription] = useState(); // Nội dung mô tả
-
     const handleDescriptionChange = (value: any) => {
-        setDescription(value); // Cập nhật giá trị khi người dùng chỉnh sửa
+        setDescription(value);
     };
     const handleCreateCheckListName = async () => {
         const response = await createCheckListNameAPI({
@@ -95,8 +111,11 @@ const CardDialog = (props: any) => {
         deleteCheckListAPI(idCheckList)
     }
 
-    const handleUseJoinCard = async () => {
-        const respone = await updateUserJoinCardAPI(data.card_id)
+    const handleUseJoinCard = async (user_id: any) => {
+        handleToast("Thành công tham gia vào thẻ!", user_id)
+        const respone = await updateUserJoinCardAPI(data.card_id, {
+            user_id: user_id,
+        })
         const newData = { ...data }
         if (!newData.userjoin) {
             newData.userjoin = []
@@ -104,22 +123,80 @@ const CardDialog = (props: any) => {
         newData.userjoin.push(respone)
         setData(newData)
     }
-    const handleUseOutCard = async () => {
-        const respone = await updateUserOutCardAPI(data.card_id)
+    const handleUseOutCard = async (user_id: any) => {
+        handleToast("Rời khỏi thẻ thành công!", user_id)
+        const respone = await updateUserOutCardAPI(data.card_id, {
+            user_id: user_id,
+        })
         const newData = { ...data }
         newData.userjoin = newData.userjoin.filter((user: any) => user.user_id != respone.user_id)
         setData(newData)
     }
 
+    const handleUpdateInformationCard = async () => {
+        await updateInformationCard(data.card_id, {
+            name: data.name,
+            description: description
+        })
+        handleToast("Cập nhật thông tin thành công", data.card_id)
+    }
+
+    const handleToast = (message: any, id: any) => {
+        toast.success(message, {
+            toastId: message + id,
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    const handleDelete = async () => {
+        await deleteCardByIdAPI(data.card_id);
+        handleToast("Xóa thẻ thành công!", data.card_id)
+        props.handleToggleModal();
+    }
+
+    const handleUpdateCheckList = async (id: any, user_id: any, name: any, timer: any, status: any) => {
+
+        const data = {
+            user_id: user_id,
+            name: name,
+            timer: timer,
+            status: status,
+            card_id: cardData.card_id
+        }
+
+        const reponse = await updateCheckListAPI(id, data);
+        setData(reponse);
+        handleToast("Cập nhật danh sách công việc thành công", id + user_id + status + name)
+    }
+
+    const handleDeleteFile = async (id: any) => {
+        await deleteFileAPI(id);
+        const newData = { ...data }
+        newData.file = newData.file.filter((file: any) => file.file_id != id)
+        setData(newData)
+    }
+
+    useEffect(() => {
+        setDescription(props.cardData?.description);
+    }, [props.cardData?.description])
+
     useEffect(() => {
         if (cardData) {
             setData(cardData)
         }
+
     }, [cardData?.card_id])
-    console.log(data.userjoin?.find((u: any) => u.user_id == userId))
     if (!cardData) {
         return
     }
+
+
     return (
         <>
             <Modal width={900} footer={null} open={props.isModalOpen} onCancel={props.handleToggleModal} title={
@@ -127,14 +204,16 @@ const CardDialog = (props: any) => {
                     <Col>
                         <Flex vertical justify='center' gap="10px">
                             <Title level={4}>{data?.name}</Title>
-                            <Text type="secondary">Trong danh sách {data.column_id}</Text>
-                            {
-                                data?.userjoin?.map((item: any) => (
-                                    <>
-                                        <Avatar><UserOutlined /></Avatar>
-                                    </>
-                                ))
-                            }
+                            <Text type="secondary">Trong danh sách {data?.column_name}</Text>
+                            <Flex>
+                                {
+                                    data?.userjoin?.map((item: any) => (
+                                        <>
+                                            <Avatar src={item?.avatar.replace("D:\\DA4\\frontend\\", "")} title={item.name}></Avatar>
+                                        </>
+                                    ))
+                                }
+                            </Flex>
                         </Flex>
                     </Col>
                 </Row>
@@ -151,7 +230,42 @@ const CardDialog = (props: any) => {
                                 onChange={handleDescriptionChange}
                                 placeholder="Thêm mô tả chi tiết hơn..."
                             />
+                            <Button style={{ marginTop: "10px" }} onClick={handleUpdateInformationCard}>Lưu</Button>
                         </div>
+                        {/* File */}
+                        {
+                            data?.file?.length > 0 && (
+                                <List
+                                    itemLayout="horizontal"
+                                    dataSource={data?.file}
+                                    renderItem={(i: any) => (
+                                        <List.Item className={cx('listwork')}>
+                                            <Upload
+                                                defaultFileList={[
+                                                    {
+                                                        uid: i.file_id,
+                                                        name: i.path.replace("D:\\DA4\\frontend\\src\\assets\\uploads\\", ""),
+                                                        status: 'done',
+                                                        url: i.path.replace("D:\\DA4\\frontend\\", ""),
+                                                    }
+                                                ]}
+                                                showUploadList={{
+                                                    showPreviewIcon: false,
+                                                    showRemoveIcon: false,
+                                                }}
+                                                onPreview={(file) => {
+                                                    window.open(file.url, '_blank');
+                                                }}
+                                            />
+                                            <Button type='text' shape='circle' onClick={() => handleDeleteFile(i.file_id)}><DeleteOutlined /></Button>
+                                        </List.Item>
+                                    )}
+                                />
+
+                            )
+
+                        }
+
                         {
                             data.checklistname?.length > 0 && (
                                 <>
@@ -173,14 +287,146 @@ const CardDialog = (props: any) => {
                                                                 renderItem={(i: any) => (
                                                                     <List.Item className={cx('listwork')}>
                                                                         <div>
-                                                                            <Checkbox />
+                                                                            <Checkbox checked={JSON.parse(i.status)} onClick={() => handleUpdateCheckList(i.checklist_id, i.user_id, i.name, i.timer, i.status === "true" ? "false" : "true")} />
                                                                             <span style={{ marginLeft: '10px' }}>{i.name}</span>
                                                                         </div>
-                                                                        <div className={cx('listwork-button')}>
-                                                                            <Button icon={<ClockCircleOutlined />} onClick={handleOpenModal}></Button>
-                                                                            <Button icon={<UserAddOutlined />}></Button>
-                                                                            <Button icon={<DeleteOutlined />} onClick={() => handleDeleteCheckList(i.checklist_id, item.checklistname_id)}></Button>
-                                                                        </div>
+
+
+                                                                        {
+                                                                            props?.board?.guest?.find((guest: any) => guest.user_id === i.user_id) ? (
+                                                                                <div className={cx('listwork-button-show')}>
+                                                                                    <Button icon={<ClockCircleOutlined />} onClick={handleOpenModal}></Button>
+
+                                                                                    <CustomPop title={
+                                                                                        <>
+                                                                                            <Flex justify='center'>
+                                                                                                Thành viên
+                                                                                            </Flex>
+                                                                                        </>
+                                                                                    } content={
+                                                                                        <>
+                                                                                            <Flex vertical gap="10px">
+                                                                                                <Input style={{ width: "100%" }} placeholder='Tìm kiếm thành viên trong nhóm' />
+                                                                                                <Menu
+                                                                                                    style={{ width: 256 }}
+                                                                                                    defaultSelectedKeys={['1']}
+                                                                                                    defaultOpenKeys={['sub1']}
+                                                                                                    mode="inline"
+                                                                                                    items={[
+                                                                                                        {
+                                                                                                            key: 'grp',
+                                                                                                            label: <Text strong>Thành viên trong thẻ</Text>,
+                                                                                                            type: 'group',
+                                                                                                            children: data?.userjoin?.map((item: any, index: any) => ({
+                                                                                                                key: `userjoin-${index}`,
+                                                                                                                label: <>
+                                                                                                                    <Flex gap={8} style={{ justifyContent: "space-between", alignItems: "center" }}>
+                                                                                                                        <Avatar src={item?.avatar?.replace("D:\\DA4\\frontend\\", "")} />
+                                                                                                                        <Text>{item.name}</Text>
+                                                                                                                        <Button type='text' shape='circle' onClick={() => handleUpdateCheckList(i.checklist_id, item.user_id, i.name, i.timer, i.status)}><UserAddOutlined /></Button>
+                                                                                                                    </Flex>
+                                                                                                                </>
+
+                                                                                                            })),
+                                                                                                        },
+                                                                                                        {
+                                                                                                            key: 'grp',
+                                                                                                            label: <Text strong>Thành viên trong bảng</Text>,
+                                                                                                            type: 'group',
+                                                                                                            children: filteredGuests?.map((item: any, index: any) => ({
+                                                                                                                key: `guestjoin-${index}`,
+                                                                                                                label: <>
+                                                                                                                    <Flex gap={8} style={{ justifyContent: "space-between", alignItems: "center" }}>
+                                                                                                                        <Avatar src={item?.avatar?.replace("D:\\DA4\\frontend\\", "")} />
+                                                                                                                        <Text>{item.name}</Text>
+                                                                                                                        <Button type='text' shape='circle' onClick={() => handleUpdateCheckList(i.checklist_id, item.user_id, i.name, i.timer, i.status)}><UserAddOutlined /></Button>
+                                                                                                                    </Flex>
+                                                                                                                </>
+                                                                                                            }))
+                                                                                                        },
+                                                                                                        {
+                                                                                                            key: 'grp',
+                                                                                                            label:
+                                                                                                                <Flex justify='center' align='center'>
+                                                                                                                    <Text onClick={() => handleUpdateCheckList(i.checklist_id, item.user_id, i.name, i.timer, i.status)}>Loại bỏ thành viên</Text>
+                                                                                                                </Flex>
+                                                                                                        },
+                                                                                                    ]}
+                                                                                                />
+                                                                                            </Flex>
+                                                                                        </>
+                                                                                    }>
+
+                                                                                        <Avatar style={{ border: "1px #5ac8fa solid" }} src={props?.board?.guest?.find(
+                                                                                            (guest: any) => guest.user_id === i.user_id
+                                                                                        )?.avatar.replace("D:\\DA4\\frontend\\", "")}></Avatar>
+
+                                                                                    </CustomPop>
+
+                                                                                    <Button icon={<DeleteOutlined />} onClick={() => handleDeleteCheckList(i.checklist_id, item.checklistname_id)}></Button>
+                                                                                </div>
+                                                                            ) : (
+                                                                                <div className={cx('listwork-button-hidden')}>
+                                                                                    <Button icon={<ClockCircleOutlined />} onClick={handleOpenModal}></Button>
+
+                                                                                    <CustomPop title={
+                                                                                        <>
+                                                                                            <Flex justify='center'>
+                                                                                                Thành viên
+                                                                                            </Flex>
+                                                                                        </>
+                                                                                    } content={
+                                                                                        <>
+                                                                                            <Flex vertical gap="10px">
+                                                                                                <Input style={{ width: "100%" }} placeholder='Tìm kiếm thành viên trong nhóm' />
+                                                                                                <Menu
+                                                                                                    style={{ width: 256 }}
+                                                                                                    defaultSelectedKeys={['1']}
+                                                                                                    defaultOpenKeys={['sub1']}
+                                                                                                    mode="inline"
+                                                                                                    items={[
+                                                                                                        {
+                                                                                                            key: 'grp',
+                                                                                                            label: <Text strong>Thành viên trong thẻ</Text>,
+                                                                                                            type: 'group',
+                                                                                                            children: data?.userjoin?.map((item: any, index: any) => ({
+                                                                                                                key: `userjoin-${index}`,
+                                                                                                                label: <>
+                                                                                                                    <Flex gap={8} style={{ justifyContent: "space-between", alignItems: "center" }}>
+                                                                                                                        <Avatar src={item?.avatar?.replace("D:\\DA4\\frontend\\", "")} />
+                                                                                                                        <Text>{item.name}</Text>
+                                                                                                                        <Button type='text' shape='circle' onClick={() => handleUpdateCheckList(i.checklist_id, item.user_id, i.name, i.timer, i.status)}><UserAddOutlined /></Button>
+                                                                                                                    </Flex>
+                                                                                                                </>
+
+                                                                                                            })),
+                                                                                                        },
+                                                                                                        {
+                                                                                                            key: 'grp',
+                                                                                                            label: <Text strong>Thành viên trong bảng</Text>,
+                                                                                                            type: 'group',
+                                                                                                            children: filteredGuests?.map((item: any, index: any) => ({
+                                                                                                                key: `guestjoin-${index}`,
+                                                                                                                label: <>
+                                                                                                                    <Flex gap={8} style={{ justifyContent: "space-between", alignItems: "center" }}>
+                                                                                                                        <Avatar src={item?.avatar?.replace("D:\\DA4\\frontend\\", "")} />
+                                                                                                                        <Text>{item.name}</Text>
+                                                                                                                        <Button type='text' shape='circle' onClick={() => handleUpdateCheckList(i.checklist_id, item.user_id, i.name, i.timer, i.status)}><UserAddOutlined /></Button>
+                                                                                                                    </Flex>
+                                                                                                                </>
+                                                                                                            }))
+                                                                                                        },
+                                                                                                    ]}
+                                                                                                />
+                                                                                            </Flex>
+                                                                                        </>
+                                                                                    }>
+                                                                                        <Button icon={<UserAddOutlined />}></Button>
+                                                                                    </CustomPop>
+
+                                                                                    <Button icon={<DeleteOutlined />} onClick={() => handleDeleteCheckList(i.checklist_id, item.checklistname_id)}></Button>
+                                                                                </div>)
+                                                                        }
                                                                     </List.Item>
                                                                 )}
                                                             />
@@ -204,7 +450,7 @@ const CardDialog = (props: any) => {
                         {/* Hoạt động */}
                         <div>
                             <Title level={5}>Hoạt động</Title>
-                            <Input placeholder="Viết bình luận..." prefix={<Avatar><UserOutlined /></Avatar>} />
+                            <Input placeholder="Viết bình luận..." prefix={<Avatar src={userAvatar} />} />
                             {
                                 data.comment?.length > 0 && (
                                     <>
@@ -214,10 +460,10 @@ const CardDialog = (props: any) => {
                                             renderItem={(item: any) => (
                                                 <List.Item>
                                                     <List.Item.Meta
-                                                        avatar={<Avatar>{ }</Avatar>}
+                                                        avatar={<Avatar src={userAvatar} />}
                                                         title={
                                                             <Text>
-                                                                <strong>{"Name"}</strong>
+                                                                <strong>{userName}</strong>
                                                             </Text>
                                                         }
                                                     />
@@ -235,9 +481,9 @@ const CardDialog = (props: any) => {
                     <Col span={8}>
                         {
                             data.userjoin?.find((u: any) => u.user_id == userId) ? (
-                                <Button block icon={<UserAddOutlined />} onClick={handleUseOutCard} className={cx("button")}>Rời đi</Button>
+                                <Button block icon={<UserAddOutlined />} onClick={() => handleUseOutCard(userId)} className={cx("button")}>Rời đi</Button>
                             ) : (
-                                <Button block icon={<UserAddOutlined />} onClick={handleUseJoinCard} className={cx("button")}>Tham gia</Button>
+                                <Button block icon={<UserAddOutlined />} onClick={() => handleUseJoinCard(userId)} className={cx("button")}>Tham gia</Button>
                             )
                         }
 
@@ -263,19 +509,30 @@ const CardDialog = (props: any) => {
                                                 type: 'group',
                                                 children: data?.userjoin?.map((item: any, index: any) => ({
                                                     key: `userjoin-${index}`,
-                                                    label: item.name,
+                                                    label: <>
+                                                        <Flex gap={8} style={{ justifyContent: "space-between", alignItems: "center" }}>
+                                                            <Avatar src={item?.avatar?.replace("D:\\DA4\\frontend\\", "")} />
+                                                            <Text>{item.name}</Text>
+                                                            <Button type='text' shape='circle' onClick={() => handleUseOutCard(item.user_id)}><UserDeleteOutlined /></Button>
+                                                        </Flex>
+                                                    </>
+
                                                 })),
                                             },
                                             {
                                                 key: 'grp',
                                                 label: <Text strong>Thành viên trong bảng</Text>,
                                                 type: 'group',
-                                                children: [
-                                                    {
-                                                        key: '2',
-                                                        label: 'Option 13'
-                                                    },
-                                                ],
+                                                children: filteredGuests?.map((item: any, index: any) => ({
+                                                    key: `guestjoin-${index}`,
+                                                    label: <>
+                                                        <Flex gap={8} style={{ justifyContent: "space-between", alignItems: "center" }}>
+                                                            <Avatar src={item?.avatar?.replace("D:\\DA4\\frontend\\", "")} />
+                                                            <Text>{item.name}</Text>
+                                                            <Button type='text' shape='circle' onClick={() => handleUseJoinCard(item.user_id)}><UserAddOutlined /></Button>
+                                                        </Flex>
+                                                    </>
+                                                }))
                                             },
                                         ]}
                                     />
@@ -286,6 +543,7 @@ const CardDialog = (props: any) => {
                                 Thành viên
                             </Button>
                         </CustomPop>
+
                         <CustomPop title={
                             <>
                                 <Flex justify='center'>
@@ -311,14 +569,17 @@ const CardDialog = (props: any) => {
                                     Đính kèm
                                 </Flex>
                             </>
-                        } action={true} content={
+                        } content={
                             <>
                                 <Flex vertical gap="10px" style={{ marginTop: "10px" }}>
                                     <Text strong>Đính kèm từ máy tính của bạn</Text>
                                     <Upload
-                                        onChange={handleUploadChange}
+                                        // onChange={handleUploadChange}
                                         multiple
-                                        beforeUpload={() => false}
+                                        beforeUpload={(file) => {
+                                            handleUploadChange(file);
+                                            return false;
+                                        }}
                                     >
                                         <Button icon={<UploadOutlined />}>
                                             Chọn tệp
@@ -327,18 +588,17 @@ const CardDialog = (props: any) => {
                                 </Flex>
                             </>
                         } >
-                            <Button block icon={<UserOutlined />} className={cx("button")}>
+                            <Button block icon={<LinkOutlined />} className={cx("button")}>
                                 Đính kèm
                             </Button>
                         </CustomPop>
-
-                        <Button block icon={<ArrowRightOutlined />} className={cx("button")}>Di chuyển</Button>
-
-                        <Button block icon={<BookOutlined />} className={cx("button")}>Xóa</Button>
+                        <CustomPop action={true} handleFunction={handleDelete} title={"Xác nhận xóa thẻ"}>
+                            <Button block icon={<BookOutlined />} className={cx("button")} >Xóa</Button>
+                        </CustomPop>
                     </Col>
                 </Row>
             </Modal>
-            <DateModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <DateModal isModalDate={true} isOpen={isModalOpen} onClose={handleCloseModal} start_date={data?.start_date} end_date={data?.end_date} timer={data?.timer} card_id={data?.card_id}/>
         </>
     );
 };

@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Col, Layout, Row } from 'antd';
 import styles from './HomeLayout.module.scss';
 import classNames from "classnames/bind";
@@ -14,18 +14,44 @@ const cx = classNames.bind(styles);
 const { Content, Sider } = Layout;
 
 const HomeLayout = () => {
+  const navigate = useNavigate()
   const [workSpaceMember, setWorkSpaceMember] = useState<any[]>([])
   const [workSpaceGuest, setWorkSpaceGuest] = useState<any[]>([])
+  // const fetchWorkSapceMemberByUserID = async () => {
+  //   const response = await getWorkSpaceMemberByIdUserAPI()
+  //   if (!response.message) {
+  //     setWorkSpaceMember(response)
+  //   }
+  // }
+  // const fetchWorkSapceGuestByUserID = async () => {
+  //   const response = await getWorkSpaceGuestByIdUserAPI()
+  //   if (!response.message) {
+  //     setWorkSpaceGuest(response)
+  //   }
+  // }
   const fetchWorkSapceMemberByUserID = async () => {
-    const response = await getWorkSpaceMemberByIdUserAPI()
-    if (!response.message) {
-      setWorkSpaceMember(response)
+    try {
+      const response = await getWorkSpaceMemberByIdUserAPI()
+      if (!response.message) {
+        setWorkSpaceMember(response)
+      }
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        navigate("/login")
+      }
     }
   }
+
   const fetchWorkSapceGuestByUserID = async () => {
-    const response = await getWorkSpaceGuestByIdUserAPI()
-    if (!response.message) {
-      setWorkSpaceGuest(response)
+    try {
+      const response = await getWorkSpaceGuestByIdUserAPI()
+      if (!response.message) {
+        setWorkSpaceGuest(response)
+      }
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        navigate("/login")
+      }
     }
   }
 
@@ -33,6 +59,8 @@ const HomeLayout = () => {
     fetchWorkSapceMemberByUserID()
     fetchWorkSapceGuestByUserID()
   }, [])
+
+
   return (
     <>
       <Layout className={cx('home-layout')}>

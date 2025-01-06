@@ -10,5 +10,5 @@ export interface Board {
   columnOrderIds?: string[],
   column: Column[];
   status:string,
-  background?:File
+  background?:File | string;
 };

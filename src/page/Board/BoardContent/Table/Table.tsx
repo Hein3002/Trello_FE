@@ -1,56 +1,67 @@
-import style from "./Table.module.scss"
-import classNames from 'classnames/bind'
 import React, { useEffect, useState } from 'react';
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Col, List, Row, Typography } from "antd";
 import ListItem from "./ListItem/ListItem";
-import { useOutletContext } from "react-router-dom";
-import { Board } from "../../../../model/BoardModel";
-import { Column } from "../../../../model/ColumnModel";
+import { useOutletContext, useParams } from "react-router-dom";
+import { getAllCardByBoardIdAPI } from "../../../../services/Card/Card.service";
+import { getAllColumnByBoardIdAPI } from "../../../../services/Column/Column.service";
 
-const cx = classNames.bind(style)
-
-
-const {Text} = Typography
+const { Text } = Typography
 
 const App: React.FC = () => {
+  const { id } = useParams();
+  const [card, setCard] = useState<any[]>([])
+  const [column, setColumnData] = useState<any[]>([])
+  const {setCheckUpdateColumn, handleToggleModal, fetchCardById} = useOutletContext<{setCheckUpdateColumn: any, handleToggleModal: any, fetchCardById: any}>();
+  const [updateDate, setUpdateDate] = useState(false);
 
-  const { board } = useOutletContext<{board:Board}>()
-  const [hozionColumn, setoHzionColumn] = useState<Column[]>([])
+  const fetchData = async () => {
+    const card = await getAllCardByBoardIdAPI(id);
+    const column = await getAllColumnByBoardIdAPI(id);
+    setColumnData(column);
+    setCard(card);
+  }
 
-  useEffect(()=> {
-    if(board?.column) {
-      setoHzionColumn(board?.column)
-    }
-  },[board])
-  
+
+  useEffect(() => {
+    fetchData();
+  }, [handleToggleModal, updateDate])
+
+
   return (
     <>
-      <Row>
-        <Col span={6}>
-          <Text strong>Thẻ</Text>
-        </Col>
-        <Col span={6}>
-          <Text strong>Danh sách</Text>
-        </Col>
-        <Col span={4}>
-          <Text strong>Nhãn</Text>
-        </Col>
-        <Col span={4}>
-          <Text strong>Thành viên</Text>
-        </Col>
-        <Col span={4}>
-          <Text strong>Ngày hết hạn</Text>
-        </Col>
-      </Row>
-          <List
-            itemLayout="horizontal"
-            dataSource={hozionColumn}
-            renderItem={(item, index) => (
-              <ListItem item={item} />
-            )}
-          />
+      <div style={{ backgroundColor: "white", marginTop: "10px", marginBottom: "10px", padding: "10px", paddingLeft: "30px", borderRadius: "5px" }}>
+        <Row >
+          <Col span={8}>
+            <Text strong>Thẻ</Text>
+          </Col>
+          <Col span={6}>
+            <Text strong>Danh sách</Text>
+          </Col>
+          <Col span={4}>
+            <Text strong>Thành viên</Text>
+          </Col>
+          <Col span={6}>
+            <Text strong>Ngày hết hạn</Text>
+          </Col>
+        </Row>
+        <List
+          style={{
+            height: "79.5vh", width: "100%", backgroundColor: "white", overflowY: "auto"
+          }}
+          itemLayout="horizontal"
+          dataSource={card}
+          renderItem={(item, index) => (
+            <ListItem 
+            item={item} 
+            column={column} 
+            setCheckUpdateColumn={setCheckUpdateColumn} 
+            handleToggleModal={handleToggleModal} 
+            fetchCardById={fetchCardById} 
+            setUpdateDate={setUpdateDate}/>
+          )}
+
+        />
+      </div>
     </>
   )
 };

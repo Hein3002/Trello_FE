@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import styles from "../../Work.module.scss";
 import { IoSearchOutline } from "react-icons/io5";
 import {  Button, Row, Col, Select, Flex, Input, Typography } from 'antd';
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { URL } from "../../../../utils/url";
 import SymbolicTable from "../../../../component/SymbolicTable/SymbolicTable";
 
@@ -10,6 +10,7 @@ import SymbolicTable from "../../../../component/SymbolicTable/SymbolicTable";
 const { Title, Text } = Typography;
 const cx = classNames.bind(styles);
 const TableWorkPage = () => {
+  const {idWorkspace} = useParams();
   const {data, showModal} = useOutletContext<{data:any, showModal:any}>()
   return (
     <div>
@@ -25,24 +26,25 @@ const TableWorkPage = () => {
                 <Flex vertical>
                   <Text strong>Sắp sếp theo</Text>
                   <Select
-                    placeholder="Hoạt động gần đây nhất"
+                    placeholder="Sắp sếp theo"
                     className={cx('select-tag')}
+                    style={{width: "230px"}}
                     options={[
-                      { value: 'jack', label: 'Jack' },
-                      { value: 'lucy', label: 'Lucy' },
-                      { value: 'Yiminghe', label: 'yiminghe' },
+                      { value: 'Hoạt động gần đây nhất', label: 'Hoạt động gần đây nhất' },
+                      { value: 'Ít hoạt động nhất gần đây', label: 'Ít hoạt động nhất gần đây' },
+                      { value: 'Theo bảng chữ cái A-Z', label: 'Theo bảng chữ cái A-Z' },
+                      { value: 'Theo bảng chữ cái Z-A', label: 'Theo bảng chữ cái Z-A' },
                     ]}
                   />
                 </Flex>
                 <Flex vertical>
-                  <Text strong>Sắp sếp theo</Text>
+                  <Text strong>Lọc theo</Text>
                   <Select
-                    placeholder="Hoạt động gần đây nhất"
+                    style={{width: "150px"}}
+                    placeholder="Lọc theo"
                     className={cx('select-tag')}
                     options={[
-                      { value: 'jack', label: 'Jack' },
-                      { value: 'lucy', label: 'Lucy' },
-                      { value: 'Yiminghe', label: 'yiminghe' },
+                      { value: 'Bộ sưu tập', label: 'Bộ sưu tập' },
                     ]}
                   />
                 </Flex>
@@ -56,7 +58,7 @@ const TableWorkPage = () => {
               {
                 data?.board && data.board.length > 0
                   ? data.board.map((item: any, index: any) => (
-                    <SymbolicTable path={URL.BOARD+ item.board_id} key={index} title={item.name} />
+                    <SymbolicTable path={`/workspace/${idWorkspace}${URL.BOARD+ item.board_id}`} key={index} title={item.name} background={item?.background?.replace("D:\\DA4\\frontend\\", "")}/>
                   ))
                   : []
               }

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Input, Button, Typography, Card, Space, Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Input, Button, Typography, Card, Space, Avatar, Flex } from 'antd';
+import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import style from "./Chat.module.scss"
 import { createMessageAPI, getMessageAPI } from '../../services/Message/Message.service';
@@ -11,6 +11,7 @@ const { Text, Title } = Typography;
 const cx = classNames.bind(style)
 
 const ChatApp = (props: any) => {
+
   const { converSation } = props
   const idUser = localStorage.getItem("user_id")
 
@@ -33,37 +34,51 @@ const ChatApp = (props: any) => {
       handleSendMessage();
     }
   };
+
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+
   const handleSendMessage = async () => {
     if (inputValue.trim() && socket) {
       // Send message to the server
-      socket.emit('send_message', inputValue);
+      socket.emit('send_message', {
+        message: inputValue,
+        sender_id: idUser as string,
+        receive_id: converSation.user_id as string
+      });
 
       // Display user's message in the chat
       setMessageData((prevMessages) => [
         ...prevMessages,
         { message: inputValue, sender_id: idUser as string },
       ]);
+
       await createMessageAPI({
         sender_id: idUser,
         conversation_id: converSation?.conversation_id,
         message: inputValue
       })
+
       setInputValue('');
     }
   };
 
 
-
-
   useEffect(() => {
     const newSocket = io('http://localhost:4040');
     setSocket(newSocket);
-    newSocket.on('receive_message', (message: string, user_id: string) => {
+    newSocket.on('receive_message', (data: { message: string, sender_id: string, receive_id: string }) => {
       setMessageData((prevMessages) => [
         ...prevMessages,
-        { message: message, sender_id: user_id },
+        { message: data.message, sender_id: data.sender_id },
       ]);
     });
+
+    scrollToBottom();
 
     return () => {
       newSocket.disconnect();
@@ -71,8 +86,10 @@ const ChatApp = (props: any) => {
   }, [messageData]);
 
   useEffect(() => {
-    socket?.emit("new_user_add", idUser);
-  }, [])
+    if (socket) {
+      socket.emit("new_user_add", idUser);
+    }
+  }, [socket]);
 
   useEffect(() => {
     fetchMessage()
@@ -81,8 +98,13 @@ const ChatApp = (props: any) => {
   return (
     <div className={cx("chat")}>
       <Title level={5} style={{ margin: "10px" }}>
-        <Avatar ><UserOutlined/></Avatar>
-        {converSation.name}
+        <Flex justify="space-between" style={{ width: "100%" }} align='center'>
+          <Flex gap={"10px"} align='center'>
+            <Avatar src={converSation?.avatar?.replace("D:\\DA4\\frontend\\", "")} ></Avatar>
+            {converSation.name}
+          </Flex>
+          <Button type='text' shape="circle" onClick={() => props.setIsOpenChat(false)}><CloseOutlined /></Button>
+        </Flex>
       </Title>
       <Card
         className={cx("chat-content")}
@@ -108,7 +130,7 @@ const ChatApp = (props: any) => {
           >
             <Space align="start">
               {msg.sender_id != idUser && (
-                <Avatar style={{ backgroundColor: '#87d068' }}><UserOutlined/></Avatar>
+                <Avatar title={msg.created_at} src={converSation?.avatar?.replace("D:\\DA4\\frontend\\", "")}></Avatar>
               )}
               <Card
                 styles={{
@@ -125,6 +147,7 @@ const ChatApp = (props: any) => {
             </Space>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </Card>
       <div className={cx("chat-input")}>
         <Input.TextArea

@@ -16,3 +16,18 @@ export const createGuestdAPI = async (data: any): Promise<any> => {
     const res = await apiServer?.post(`/api/board/createguest`, data);
     return res?.data;
 };
+
+export const getBoardByCustomAPI = async (id: any, data: any): Promise<any> => {
+    const res = await apiServer?.post(`/api/board/getboardbycustom/` + id, data);
+    return res?.data;
+};
+
+export const deleteGuestAPI = async (id: any, data: any): Promise<any> => {
+    const res = await apiServer?.post(`/api/board/deleteguest/` + id, data);
+    return res?.data;
+};
+
+export const deleteBoardAPI = async (id: any): Promise<any> => {
+    const res = await apiServer?.delete(`/api/board/delete/` + id);
+    return res?.data;
+};

@@ -17,7 +17,7 @@ const Home = () => {
   const { workSpaceMember, workSpaceGuest } = useOutletContext<{ workSpaceMember: any[], workSpaceGuest: any[] }>()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentIdWorkSpace, setCurrentIdWorkSpace] = useState<number>()
-  const showModal = (workSapceId:any) => {
+  const showModal = (workSapceId: any) => {
     setIsModalOpen(true);
     setCurrentIdWorkSpace(workSapceId)
   };
@@ -28,7 +28,7 @@ const Home = () => {
   };
   return (
     <>
-      <ModalCreateColumn isOpenModal={isModalOpen} handleCancel={handleCancel} id={currentIdWorkSpace}/>
+      <ModalCreateColumn isOpenModal={isModalOpen} handleCancel={handleCancel} id={currentIdWorkSpace} />
       <div className={cx('home-page')}>
         <div className={cx('home-content')}>
           {/* <div className={cx('home-content-top')}>
@@ -46,7 +46,7 @@ const Home = () => {
               Các không gian làm việc
             </Title>
             {
-              workSpaceMember?.map((items: any, index:any) => (
+              workSpaceMember?.map((items: any, index: any) => (
                 <div key={items.workspace_id}>
                   <div className={cx('home-content-action')}>
                     <Title level={5} className={cx('home-content-title')}>
@@ -63,10 +63,10 @@ const Home = () => {
                   <div className={cx('home-content-middle-main')}>
                     {
                       items?.boards?.map((item: any) => (
-                        <Table key={item.board_id} path={URL.BOARD + item.board_id} title={item.name} />
+                        <Table key={item.board_id} path={`/workspace/${items.workspace_id}${URL.BOARD + item.board_id}`} title={item.name} background={item?.background?.replace("D:\\DA4\\frontend\\", "")} />
                       ))
                     }
-                    <Button style={{ width: "23.5%", padding: "50px" }} onClick={()=>showModal(items.workspace_id)}>Tạo bảng</Button>
+                    <Button style={{ width: "23.5%", padding: "50px" }} onClick={() => showModal(items.workspace_id)}>Tạo bảng</Button>
                   </div>
                 </div>
               )
@@ -84,14 +84,13 @@ const Home = () => {
                     <FaRegClock />
                     {items.workspace_name}
                   </Title>
-                  {
-                    items.boards.map((item: any) => (
-                      <div key={item.board_id} className={cx('home-content-bottom-main')}>
-                        <Table path={URL.BOARD + item.board_id} title={item.name} />
-                      </div>
-                    ))
-                  }
-
+                    {
+                      items.boards.map((item: any) => (
+                        <div key={item.board_id} className={cx('home-content-bottom-main')}>
+                          <Table path={`/workspace/${items.workspace_id}${URL.BOARD + item.board_id}`} title={item.name} background={item?.background?.replace("D:\\DA4\\frontend\\", "")} />
+                        </div>
+                      ))
+                    }
                 </div>
               ))
             }

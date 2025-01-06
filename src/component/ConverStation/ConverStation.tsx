@@ -24,7 +24,7 @@ const Conversation = (props:any) => {
   };
   useEffect(() => {
     fetchMenuData();
-  }, []);
+  }, [props.resetConverSation]);
  
   const menuItems = ChatData(chatMenuItems||[], props.handleOPenChat);
   return (

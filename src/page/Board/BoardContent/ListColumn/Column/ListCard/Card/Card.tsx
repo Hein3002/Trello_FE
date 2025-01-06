@@ -15,7 +15,7 @@ interface Props {
   action?: boolean;
   card: CardModel;
 }
-const {Text} =Typography
+const { Text } = Typography
 
 const Card: React.FC<Props> = ({ action = false, card }) => {
   const {
@@ -38,7 +38,7 @@ const Card: React.FC<Props> = ({ action = false, card }) => {
     opacity: isDragging ? 0.5 : undefined,
     border: isDragging ? '3px solid #81ecec' : undefined,
     width: "100%",
-    padding:card?.FE_PlaceholderCard ? "0px" :"10px",
+    padding: card?.FE_PlaceholderCard ? "0px" : "10px",
     visibility: card?.FE_PlaceholderCard ? "hidden" : "visibility",
     // display: card?.FE_PlaceholderCard ? "none" : "block",
   };
@@ -76,10 +76,10 @@ const Card: React.FC<Props> = ({ action = false, card }) => {
         <Flex align="center" justify="space-between" gap="10px">
           {
             toggleEditCard ? (
-              <Input value={card?.name} onClick={(e)=>e.stopPropagation()}/>
+              <Input value={card?.name} onClick={(e) => e.stopPropagation()} />
             ) : (
               <>
-                <Text style={{marginLeft:"5px"}}>{card?.name}</Text>
+                <Text style={{ marginLeft: "5px" }}>{card?.name}</Text>
               </>
             )
           }
@@ -107,16 +107,15 @@ const Card: React.FC<Props> = ({ action = false, card }) => {
             </div>
           ) : <></>
         }
-        {
-          card?.userjoin && (
-            <>
-              <Flex justify="end">
-                <Avatar style={{ backgroundColor: '#87d068' }}><UserOutlined /></Avatar>
-              </Flex>
-            </>
-          )
-        }
-
+        <Flex justify="end">
+          {
+            card?.userjoin?.map((item: any, key: any) => (
+              <Avatar src={item.avatar?.replace("D:\\DA4\\frontend\\", "")} key={key}>
+                <UserOutlined />
+              </Avatar>
+            ))
+          }
+        </Flex>
       </CardAntd >
 
     </>

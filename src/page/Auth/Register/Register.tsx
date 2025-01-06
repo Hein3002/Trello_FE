@@ -1,9 +1,11 @@
 import styles from './Register.module.scss';
 import classNames from 'classnames/bind';
-import { Form, Input, Typography, Button, FormProps } from "antd";
+import { Form, Input, Typography, Button, FormProps, Upload } from "antd";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../../services/User/user.service';
+import { PlusOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 const { Title } = Typography;
@@ -18,12 +20,21 @@ type FieldType = {
 const Register = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  
-  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-      const response = await register(values)
-      if(response){
-        navigate("/login")
-      }
+  const [logo, setLogo] = useState<File | null>(null)
+
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values: any) => {
+    const formData = new FormData();
+    Object.keys(values).forEach(key => {
+      formData.append(key, values[key]);
+    });
+
+    if (logo && typeof logo !== 'string') {
+      formData.append('files', logo);
+    }
+    const response = await register(formData)
+    if (response) {
+      navigate("/login")
+    }
   };
   return (
     <div className={cx('login')}>
@@ -61,9 +72,22 @@ const Register = () => {
         >
           <Input.Password placeholder='Mật khẩu' />
         </Form.Item>
+        <Form.Item label="" name="files">
+          <Upload listType="picture-card"
+            beforeUpload={(file) => {
+              setLogo(file); // Set the image file to the state
+              return false; // Prevent default upload behavior
+            }}
+          >
+            <button style={{ border: 0, background: 'none' }} type="button">
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Chọn ảnh</div>
+            </button>
+          </Upload>
+        </Form.Item>
         <Form.Item >
           <Button type="primary" htmlType="submit" className={cx('btn')}>
-            Đăng nhập
+            Đăng ký
           </Button>
         </Form.Item>
       </Form>

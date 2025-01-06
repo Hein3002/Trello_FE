@@ -13,9 +13,9 @@ import Table from "../page/Board/BoardContent/Table/Table";
 import { URL } from "../utils/url";
 import Schedule from "../page/Board/BoardContent/Calender/Calender";
 import TableWorkPage from "../page/Work/compoent/WorkPage/TableWorkPage";
-import MemberWorkPage from "../page/Work/compoent/WorkPage/MemberWorkPage";
-
-
+import { MemberWorkPage} from "../page/Work/compoent/WorkPage/MemberWorkPage";
+import SettingWorkPage from "../page/Work/compoent/WorkPage/SettingWorkPage";
+import DashBoard from "../page/Board/BoardContent/DashBoard/DashBoard";
 
 const route = createBrowserRouter([
   {
@@ -35,7 +35,7 @@ const route = createBrowserRouter([
     element: <BoardLayout />,
     children: [
       {
-        path: "workspace/:id",
+        path: "workspace/:idWorkspace",
         element:<Work/>,
         children:[
           {
@@ -45,11 +45,19 @@ const route = createBrowserRouter([
           {
             path:"member",
             element:<MemberWorkPage/>
+          },
+          {
+            path:"guest",
+            element:<MemberWorkPage/>
+          },
+          {
+            path:"setting",
+            element:<SettingWorkPage/>
           }
         ]
       },
       {
-        path: URL.BOARD+":id",
+        path: "workspace/:idWorkspace" + URL.BOARD+":id",
         element: <BoardDetials />,
         children:[
           {
@@ -63,6 +71,10 @@ const route = createBrowserRouter([
           {
             path: "table",
             element: <Table/>
+          },
+          {
+            path: "dashboard",
+            element: <DashBoard/>
           }
         ]
       }

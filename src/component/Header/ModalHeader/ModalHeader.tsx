@@ -1,4 +1,4 @@
-import { Form, FormProps, Input, Modal, Upload } from 'antd';
+import { Form, FormProps, Input, Modal, Select, Upload } from 'antd';
 import { createWorkSpacedAPI } from '../../../services/WorkSpace/workSapce.service';
 import { PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
@@ -10,7 +10,7 @@ import { URL } from '../../../utils/url';
 const ModalHeader = (props: any) => {
   const [logo, setLogo] = useState<File | null>(null)
   const [form] = Form.useForm();
-  const navigate =  useNavigate()
+  const navigate = useNavigate()
   const onFinish: FormProps<WorkSpace>['onFinish'] = async () => {
     form
       .validateFields()
@@ -23,9 +23,9 @@ const ModalHeader = (props: any) => {
         if (logo && typeof logo !== 'string') {
           formData.append('files', logo);
         }
-       const responese = await createWorkSpacedAPI(formData)
-       console.log(responese)
-        navigate(URL.WORKSPACE+responese.workspace_id)
+        const responese = await createWorkSpacedAPI(formData)
+        console.log(responese)
+        navigate(URL.WORKSPACE + responese.workspace_id)
       })
   }
   const handleSubmit = () => {
@@ -34,7 +34,7 @@ const ModalHeader = (props: any) => {
   return (
     <>
       <Modal
-        title="Basic Modal"
+        title="Tạo không gian làm việc"
         open={props.isOpenModal}
         onOk={handleSubmit}
         onCancel={props.handleCancel}
@@ -49,25 +49,32 @@ const ModalHeader = (props: any) => {
         >
           <Form.Item<WorkSpace>
             name="name"
-            rules={[{ required: true, message: 'Please input your name!' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập tên không gian làm việc!' }]}
           >
-            <Input placeholder='Tên đăng nhập' />
+            <Input placeholder='Tên không gian làm việc' />
           </Form.Item>
           <Form.Item<WorkSpace>
             name="description"
-            rules={[{ required: true, message: 'Please input your email!' }]}
+          // rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}
           >
-            <Input placeholder='Email' />
+            <Input placeholder='Mô tả' />
           </Form.Item>
 
           <Form.Item<WorkSpace>
             name="status"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
           >
-            <Input.Password placeholder='Mật khẩu' />
+            <Select
+              placeholder="Chọn trạng thái"
+              options={[
+                { value: 'Riêng tư', label: 'Riêng tư' },
+                { value: 'Không gian làm việc', label: 'Không gian làm việc' },
+                { value: 'Công khai', label: 'Công khai' },
+              ]}
+            />
           </Form.Item>
 
-          <Form.Item label="Upload" name="files">
+          <Form.Item name="files">
             <Upload listType="picture-card"
               beforeUpload={(file) => {
                 setLogo(file); // Set the image file to the state
@@ -76,7 +83,7 @@ const ModalHeader = (props: any) => {
             >
               <button style={{ border: 0, background: 'none' }} type="button">
                 <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
+                <div style={{ marginTop: 8 }}>Chọn ảnh</div>
               </button>
             </Upload>
           </Form.Item>

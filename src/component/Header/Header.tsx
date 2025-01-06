@@ -10,13 +10,24 @@ import MenuHeader from "../DropDow/Dropdow";
 import { notificationMenuItem, recentlyMenuItem, starMenuItem, userMenuItem, worksapcesMenuItem } from "./MenuItem/MenuItem";
 import { FaRegBell } from "react-icons/fa";
 import ModalHeader from "./ModalHeader/ModalHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Conversation from "../ConverStation/ConverStation";
 
 const cx = classNames.bind(styles);
 
-const Header = (props:any) => {
+const Header = (props: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userAvatar, setUserAvatar] = useState<any>(null);
+  const [userName, setUserName] = useState<any>(null);
+
+  useEffect(() => {
+    const avatar = localStorage.getItem("user_avatar");
+    const name = localStorage.getItem("user_name");
+    if (avatar && name) {
+      setUserAvatar(avatar);
+      setUserName(name);
+    }
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -40,9 +51,9 @@ const Header = (props:any) => {
               <BsGrid3X3Gap size={18} />
               <Link to='/'>
                 <Flex align="center" gap={5}>
-                  <BsTrello size={18} />
+                  <BsTrello size={18} style={{ transform: "rotate(90deg)", transformOrigin: "center" }} />
                   <h2 className={cx('trello-title')}>
-                    Trello
+                    Task
                   </h2>
                 </Flex>
               </Link>
@@ -63,8 +74,8 @@ const Header = (props:any) => {
                 <Badge dot>
                   <FaRegBell size={18} />
                 </Badge>} items={notificationMenuItem} />
-              <Conversation handleOPenChat={props.handleOPenChat}/>
-              <MenuHeader Icon={<Avatar shape="circle" size="small" icon={<UserOutlined />} />} items={userMenuItem} />
+              <Conversation handleOPenChat={props.handleOPenChat} resetConverSation={props.resetConverSation}/>
+              <MenuHeader Icon={<Avatar shape="circle" size="small" src={userAvatar} title={userName} />} items={userMenuItem} />
             </Flex>
           </Col>
         </Row>

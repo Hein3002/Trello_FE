@@ -7,6 +7,6 @@ export const createFileAPI = async (data: any): Promise<any> => {
 };
 
 export const deleteFileAPI = async (id: any): Promise<any> => {
-    const res = await apiServer?.delete(`/api/file/delete`+id);
+    const res = await apiServer?.delete(`/api/file/delete/`+id);
     return res?.data;
 };
